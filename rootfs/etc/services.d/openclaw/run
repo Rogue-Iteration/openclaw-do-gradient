@@ -1,0 +1,8 @@
+#!/bin/bash
+# OpenClaw gateway service
+source /etc/s6-overlay/lib/env-utils.sh
+source_env_prefix OPENCLAW_
+
+echo "[openclaw] Starting openclaw gateway..."
+
+with_env_prefix --user openclaw OPENCLAW_ -- openclaw gateway --allow-unconfigured

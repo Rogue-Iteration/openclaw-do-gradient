@@ -1,0 +1,46 @@
+{
+  "default_rules": {
+    "price_movement_pct": 5,
+    "sentiment_shift": true,
+    "social_volume_spike": true,
+    "sec_filing": true,
+    "competitive_news": true
+  },
+  "global_settings": {
+    "significance_threshold": 6,
+    "cheap_model": "qwen3-32b",
+    "strong_model": "claude-sonnet-4-5-20250514"
+  },
+  "tickers": [
+    {
+      "symbol": "CAKE",
+      "name": "The Cheesecake Factory",
+      "added": "2026-02-12",
+      "rules": {}
+    },
+    {
+      "symbol": "HOG",
+      "name": "Harley-Davidson",
+      "added": "2026-02-12",
+      "rules": {}
+    },
+    {
+      "symbol": "BOOM",
+      "name": "Dynamic Materials Corp",
+      "added": "2026-02-12",
+      "rules": {}
+    },
+    {
+      "symbol": "LUV",
+      "name": "Southwest Airlines",
+      "added": "2026-02-12",
+      "rules": {}
+    },
+    {
+      "symbol": "WOOF",
+      "name": "Petco Health and Wellness",
+      "added": "2026-02-12",
+      "rules": {}
+    }
+  ]
+}

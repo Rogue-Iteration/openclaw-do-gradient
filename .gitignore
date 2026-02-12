@@ -16,4 +16,4 @@ build/
 
 # Research data (generated at runtime)
 research/
-data/
+/data/

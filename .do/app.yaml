@@ -1,18 +1,70 @@
-name: research-assistant
+name: openclaw-research
 region: nyc
 
 workers:
-  - name: agent
-    dockerfile_path: Dockerfile
-    git:
-      repo_clone_url: https://github.com/Rogue-Iteration/openclaw-do-gradient.git
-      branch: main
-    instance_size_slug: apps-s-1vcpu-1gb
+  - name: openclaw
+    dockerfile_path: /Dockerfile
+    source_dir: /
     instance_count: 1
+    instance_size_slug: apps-s-1vcpu-2gb
+    git:
+      branch: main
+      repo_clone_url: https://github.com/Rogue-Iteration/openclaw-do-gradient.git
     envs:
+      # ============================================================
+      # REQUIRED
+      # ============================================================
       - key: GRADIENT_API_KEY
         scope: RUN_TIME
         type: SECRET
+      - key: OPENCLAW_GATEWAY_TOKEN
+        scope: RUN_TIME
+        type: SECRET
+      - key: STABLE_HOSTNAME
+        scope: RUN_TIME
+        value: openclaw-research
+
+      # ============================================================
+      # FEATURE FLAGS — console-only mode
+      # ============================================================
+      - key: ENABLE_NGROK
+        scope: RUN_TIME
+        value: "false"
+      - key: TAILSCALE_ENABLE
+        scope: RUN_TIME
+        value: "false"
+      - key: ENABLE_UI
+        scope: RUN_TIME
+        value: "false"
+      - key: SSH_ENABLE
+        scope: RUN_TIME
+        value: "false"
+
+      # ============================================================
+      # SPACES PERSISTENCE (Restic backup)
+      # ============================================================
+      - key: ENABLE_SPACES
+        scope: RUN_TIME
+        value: "true"
+      - key: RESTIC_SPACES_ACCESS_KEY_ID
+        scope: RUN_TIME
+        type: SECRET
+      - key: RESTIC_SPACES_SECRET_ACCESS_KEY
+        scope: RUN_TIME
+        type: SECRET
+      - key: RESTIC_SPACES_ENDPOINT
+        scope: RUN_TIME
+        value: nyc3.digitaloceanspaces.com
+      - key: RESTIC_SPACES_BUCKET
+        scope: RUN_TIME
+        value: openclaw-research
+      - key: RESTIC_PASSWORD
+        scope: RUN_TIME
+        type: SECRET
+
+      # ============================================================
+      # RESEARCH SKILL — Gradient AI Knowledge Base + Spaces storage
+      # ============================================================
       - key: DO_API_TOKEN
         scope: RUN_TIME
         type: SECRET
@@ -31,6 +83,3 @@ workers:
       - key: GRADIENT_KB_UUID
         scope: RUN_TIME
         type: SECRET
-      - key: OPENCLAW_CMD
-        scope: RUN_TIME
-        value: "clawd start"

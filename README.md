@@ -1,192 +1,164 @@
-# 🔬 Proactive Research Assistant
+# OpenClaw + Gradient AI — Investment Research Assistant
 
-> **Investment research on autopilot.** This AI agent monitors stocks, gathers data from news, Reddit, and SEC filings, and alerts you on Telegram when something significant happens.
->
-> Built with [OpenClaw](https://github.com/openclaw/openclaw) + [DigitalOcean Gradient AI](https://www.digitalocean.com/products/ai).
+An AI-powered research assistant that monitors your stock watchlist, gathers intelligence from multiple sources, and delivers actionable alerts — all manageable through chat.
 
-> [!CAUTION]
-> This is a **demo project** for educational purposes. **Not financial advice.** Do not make investment decisions based on this tool. Always consult a licensed financial advisor.
+Built on [OpenClaw](https://openclaw.com) with [DigitalOcean Gradient AI](https://www.digitalocean.com/products/gradient-ai) for inference and knowledge retrieval.
 
----
+## What It Does
 
-## ✨ What It Does
+| Feature | How It Works |
+|---------|-------------|
+| **Watchlist management** | Add/remove tickers, set custom alert rules — all via chat |
+| **Multi-source intelligence** | Gathers news, Reddit sentiment, SEC filings per ticker |
+| **AI-powered analysis** | Gradient AI scores significance and generates summaries |
+| **Knowledge Base** | Research stored in DO Spaces, indexed for RAG queries |
+| **Automated heartbeat** | Runs the gather→analyze→store→alert cycle periodically |
+| **Chat-first** | Connect via Telegram, WhatsApp, Signal, or Discord |
 
-- 📊 **Monitors your watchlist** — tracks stocks like $CAKE, $HOG, $BOOM, $LUV, $WOOF
-- 🔍 **Gathers research automatically** every 30 minutes from Google News, Reddit, and SEC EDGAR
-- 🧠 **Analyzes significance** using AI (cheap model for quick scan, strong model for deep analysis)
-- 🚨 **Alerts you proactively** on Telegram when something important happens
-- 💬 **Answers your questions** — "What do you know about $CAKE?" → AI-powered response using all accumulated research
-- ⚙️ **Configurable by chat** — "Add $DIS to my watchlist" or "Lower the price alert for $HOG to 3%"
+## Architecture
 
----
+```
+You ↔ Telegram/WhatsApp ↔ OpenClaw Gateway ↔ Gradient AI (inference)
+                                    ↓
+                          Research Skill (Python)
+                          ├── gather.py      → News, Reddit, SEC
+                          ├── analyze.py     → AI scoring + summaries
+                          ├── store.py       → Upload to Spaces → KB
+                          ├── alert.py       → Format notifications
+                          ├── query_kb.py    → RAG queries
+                          └── manage_watchlist.py → Watchlist CRUD
+```
 
-## 🚀 Setup
+## Quick Start
 
-### Step 1: Create Your DigitalOcean Resources
+### Option A: Deploy to DigitalOcean App Platform
 
-You need to set up a few things in your [DigitalOcean Dashboard](https://cloud.digitalocean.com). Click each link and follow the instructions:
+**Cost**: ~$24/mo for the 2GB worker (OpenClaw requires 2GB RAM minimum) + inference costs.
+
+#### Prerequisites
+- [DigitalOcean account](https://cloud.digitalocean.com)
+- [doctl CLI](https://docs.digitalocean.com/reference/doctl/how-to/install/) installed and authenticated
+
+#### Step 1: Create Your Resources
 
 | # | What to Create | Where | What You'll Get |
 |---|---------------|-------|-----------------|
-| 1 | **API Token** | [API → Tokens → Generate](https://cloud.digitalocean.com/account/api/tokens) | A token starting with `dop_v1_...` |
-| 2 | **Gradient AI Key** | [Gradient AI → API Keys](https://cloud.digitalocean.com/gen-ai/api-keys) | An API key for AI inference |
-| 3 | **Spaces Bucket** | [Spaces → Create](https://cloud.digitalocean.com/spaces/new) | A bucket name (e.g., `my-research`) |
-| 4 | **Spaces Keys** | [API → Spaces Keys → Generate](https://cloud.digitalocean.com/account/api/spaces) | An Access Key + Secret Key pair |
-| 5 | **Knowledge Base** | [Gradient AI → Knowledge Bases](https://cloud.digitalocean.com/gen-ai/knowledge-bases) | A UUID (visible in the URL after creation) |
+| 1 | **API Token** | [API → Tokens](https://cloud.digitalocean.com/account/api/tokens) | `dop_v1_...` |
+| 2 | **Gradient AI Key** | [Gradient AI → API Keys](https://cloud.digitalocean.com/gen-ai/api-keys) | API key for inference |
+| 3 | **Spaces Bucket** | [Spaces → Create](https://cloud.digitalocean.com/spaces/new) | Bucket name |
+| 4 | **Spaces Keys** | [API → Spaces Keys](https://cloud.digitalocean.com/account/api/spaces) | Access Key + Secret |
+| 5 | **Knowledge Base** | [Gradient AI → Knowledge Bases](https://cloud.digitalocean.com/gen-ai/knowledge-bases) | UUID from the URL |
 
 > [!TIP]
-> When creating the **Knowledge Base** (#5), connect it to your **Spaces bucket** (#3) as a data source. This is how the assistant stores and later retrieves research.
+> Connect your Spaces bucket as a data source for the Knowledge Base — this is how the assistant stores and retrieves research.
 
-**Save all these values** somewhere safe (e.g., a password manager). You'll need them in Step 4.
-
-### Step 2: Install & Authenticate doctl
+#### Step 2: Deploy
 
 ```bash
-# macOS
-brew install doctl
-
-# Authenticate with your API token from Step 1
-doctl auth init
-# Paste your API token when prompted
+# Clone and deploy
+git clone https://github.com/Rogue-Iteration/openclaw-do-gradient.git
+cd openclaw-do-gradient
+doctl apps create --spec .do/app.yaml --wait
 ```
 
-### Step 3: Deploy the App
+#### Step 3: Add Your Secrets
 
-Copy the prompt below and paste it into your AI assistant (ChatGPT, Claude, Gemini, etc.). It will deploy the app for you — **no credentials needed in this step**.
+1. Go to [DigitalOcean Apps Dashboard](https://cloud.digitalocean.com/apps)
+2. Click **openclaw-research** → **Settings** → **openclaw** component → **Environment Variables**
+3. Add each secret:
 
-````
-Deploy the OpenClaw Research Assistant to DigitalOcean App Platform.
+| Variable | What to Enter |
+|----------|---------------|
+| `GRADIENT_API_KEY` | Your Gradient AI API key |
+| `OPENCLAW_GATEWAY_TOKEN` | Any strong password (for gateway auth) |
+| `RESTIC_SPACES_ACCESS_KEY_ID` | Spaces access key (for persistence) |
+| `RESTIC_SPACES_SECRET_ACCESS_KEY` | Spaces secret key |
+| `RESTIC_PASSWORD` | Any strong password (encrypts backups) |
+| `DO_API_TOKEN` | Your API token (for KB re-indexing) |
+| `DO_SPACES_ACCESS_KEY` | Spaces access key (for research uploads) |
+| `DO_SPACES_SECRET_KEY` | Spaces secret key |
+| `GRADIENT_KB_UUID` | Your Knowledge Base UUID |
 
-1. Clone the repository:
-   git clone https://github.com/Rogue-Iteration/openclaw-do-gradient.git
-   cd openclaw-do-gradient
+4. Click **Save** — the app will redeploy with secrets.
 
-2. Verify doctl is authenticated:
-   doctl account get
-
-3. Create the app from the spec:
-   doctl apps create --spec .do/app.yaml --wait
-
-4. Confirm the app was created and show me its ID and status:
-   doctl apps list
-
-If anything fails, show me the error and suggest a fix.
-Do NOT ask me for any API keys or secrets — I will add those
-manually through the DigitalOcean web interface.
-````
-
-### Step 4: Add Your Secrets
-
-After the app is deployed, you need to add your credentials so the assistant can connect to Gradient AI and Spaces.
-
-1. Go to your [DigitalOcean Apps Dashboard](https://cloud.digitalocean.com/apps)
-2. Click on **research-assistant**
-3. Go to **Settings** → **Components** → **agent** → **Environment Variables**
-4. Click **Edit** and add each variable from the table below:
-
-| Variable Name | What to Enter | Why It's Needed |
-|--------------|---------------|-----------------|
-| `GRADIENT_API_KEY` | Your Gradient AI API key | Powers the AI analysis of your stocks |
-| `DO_API_TOKEN` | Your personal access token | Triggers Knowledge Base re-indexing |
-| `DO_SPACES_ACCESS_KEY` | Your Spaces access key | Uploads research data to storage |
-| `DO_SPACES_SECRET_KEY` | Your Spaces secret key | Authenticates with storage |
-| `GRADIENT_KB_UUID` | Your Knowledge Base UUID | Connects to your research knowledge base |
-
-> [!NOTE]
-> `DO_SPACES_ENDPOINT` and `DO_SPACES_BUCKET` are already set in the app spec. You only need to update them if your bucket is in a different region or has a different name than the defaults.
-
-5. Click **Save** — the app will automatically redeploy with the new credentials.
-
-**That's it!** Your research assistant is now live. 🎉
-
----
-
-## 💬 How to Use It
-
-Once deployed, chat with your assistant on Telegram:
-
-| You Say | It Does |
-|---------|---------|
-| *(first message)* | Introduces itself with your watchlist and capabilities |
-| "What do you know about $CAKE?" | Searches the knowledge base and gives a sourced answer |
-| "Add $DIS to my watchlist" | Adds Disney with default alert rules |
-| "Lower the price alert for $HOG to 3%" | Updates the alert threshold |
-| "Show me my settings" | Displays all tickers and their active rules |
-
-The assistant also runs **automatically every 30 minutes**, checking all your tickers and alerting you if something significant happens — no action needed on your part.
-
----
-
-## 🏗️ Architecture
-
-```
-You (Telegram) ←→ OpenClaw Agent
-                        │
-                        ├── Every 30 min: gather → store → analyze → alert
-                        ├── Your questions: knowledge base → AI answer
-                        └── Your commands: add/remove tickers, change rules
-                        │
-                ┌───────┼───────────────┐
-                ▼       ▼               ▼
-         Gradient AI   DO Spaces    Knowledge Base
-         (analysis)    (storage)    (RAG queries)
-```
-
----
-
-## 🧪 For Developers
-
-<details>
-<summary>Click to expand development guide</summary>
-
-### Local Development
+### Option B: Run Locally
 
 ```bash
-python3 -m venv venv
-source venv/bin/activate
+# Install OpenClaw
+brew install node
+npm install -g pnpm
+pnpm add -g openclaw
+
+# Clone and set up
+git clone https://github.com/Rogue-Iteration/openclaw-do-gradient.git
+cd openclaw-do-gradient
+cp .env.example .env
+# Edit .env with your credentials
+
+# Install Python deps
 pip install -r requirements.txt
 
-# Run all tests (130 tests, ~1 second)
-pytest tests/ -v
+# Start OpenClaw with Gradient AI
+export GRADIENT_API_KEY="your-key"
+openclaw gateway --allow-unconfigured
 ```
 
-### Test Layers
+## Gradient AI Models
 
-| Layer | Tests | API Keys? |
-|-------|-------|-----------|
-| Unit | 121 | ❌ No |
-| Mocked Integration | 9 | ❌ No |
-| Live Integration | — | ✅ Yes |
+The assistant ships with these pre-configured models (switchable at runtime):
 
-### Project Structure
+| Model | Best For | Switch Command |
+|-------|----------|---------------|
+| **Llama 3.3 70B** (default) | General analysis, summaries | `/model gradient/llama3.3-70b-instruct` |
+| **DeepSeek R1 70B** | Complex financial reasoning | `/model gradient/deepseek-r1-distill-llama-70b` |
+| **Qwen3 32B** | Quick tasks, lighter workloads | `/model gradient/qwen3-32b` |
+| **GPT OSS 120B** | High-quality analysis | `/model gradient/openai-gpt-oss-120b` |
+
+You can switch models anytime in chat — no redeploy needed.
+
+## Chat Commands
+
+Once connected via Telegram, WhatsApp, Signal, or Discord:
 
 ```
-skills/gradient-research-assistant/
-├── SKILL.md              # Agent persona and tools
-├── HEARTBEAT.md          # 30-min research cycle
-├── watchlist.json        # Tickers + alert rules
-├── manage_watchlist.py   # Watchlist CRUD
-├── gather.py             # News/Reddit/SEC scraper
-├── analyze.py            # Two-pass LLM analysis
-├── store.py              # Spaces upload + KB indexing
-├── alert.py              # Alert formatting
-└── query_kb.py           # RAG query pipeline
+"Add AAPL to my watchlist"
+"Remove TSLA"
+"Set price movement threshold for AAPL to 3%"
+"Show my watchlist"
+"What's the latest research on AAPL?"
+"Run a research cycle now"
 ```
 
-### Docker (Local Testing)
+## Environment Variables
+
+| Variable | Required | Description |
+|----------|----------|-------------|
+| `GRADIENT_API_KEY` | ✅ | Gradient AI inference key |
+| `OPENCLAW_GATEWAY_TOKEN` | ✅ | Gateway authentication token |
+| `DO_API_TOKEN` | ✅ | DigitalOcean API token (KB re-indexing) |
+| `DO_SPACES_ACCESS_KEY` | ✅ | Spaces access key (research uploads) |
+| `DO_SPACES_SECRET_KEY` | ✅ | Spaces secret key |
+| `DO_SPACES_ENDPOINT` | | Spaces endpoint (default: `https://nyc3.digitaloceanspaces.com`) |
+| `DO_SPACES_BUCKET` | | Spaces bucket name (default: `openclaw-research`) |
+| `GRADIENT_KB_UUID` | ✅ | Knowledge Base UUID for RAG queries |
+| `RESTIC_PASSWORD` | | Encryption password for backups (App Platform only) |
+
+## Development
 
 ```bash
-docker compose up --build
+# Run tests
+pip install -r requirements.txt
+pytest tests/ -v
+
+# Build Docker image locally
+docker build -t openclaw-research .
+docker run -it --env-file .env openclaw-research
 ```
 
-</details>
+## Based On
 
----
+This project extends the [digitalocean-labs/openclaw-appplatform](https://github.com/digitalocean-labs/openclaw-appplatform) template with a custom research assistant skill.
 
-## 📜 License
+## License
 
 MIT
-
----
-
-*Built with [OpenClaw](https://github.com/openclaw/openclaw) × [DigitalOcean Gradient AI](https://www.digitalocean.com/products/ai)*
