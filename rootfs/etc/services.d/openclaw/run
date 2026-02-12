@@ -5,4 +5,30 @@ source_env_prefix OPENCLAW_
 
 echo "[openclaw] Starting openclaw gateway..."
 
+# ── Post-start: auto-configure Telegram after gateway is healthy ──
+if [ -n "$TELEGRAM_BOT_TOKEN" ]; then
+  (
+    # Wait for gateway to be reachable (up to 60s)
+    for i in $(seq 1 30); do
+      if su - openclaw -c "openclaw health" >/dev/null 2>&1; then
+        echo "[openclaw-post] Gateway healthy, configuring Telegram..."
+        su - openclaw -c "openclaw channels add --channel telegram --token '$TELEGRAM_BOT_TOKEN'" 2>&1
+        echo "[openclaw-post] Telegram channel added."
+
+        # Pre-seed sender allowlist if TELEGRAM_ALLOWED_IDS is set
+        if [ -n "$TELEGRAM_ALLOWED_IDS" ]; then
+          CREDS_DIR="${OPENCLAW_STATE_DIR:-/data/.openclaw}/credentials"
+          mkdir -p "$CREDS_DIR"
+          ALLOW_FILE="$CREDS_DIR/telegram-allowFrom.json"
+          echo "$TELEGRAM_ALLOWED_IDS" | tr ',' '\n' | jq -R . | jq -s '.' > "$ALLOW_FILE"
+          chown openclaw:openclaw "$ALLOW_FILE"
+          echo "[openclaw-post] Telegram allowlist seeded: $TELEGRAM_ALLOWED_IDS"
+        fi
+        break
+      fi
+      sleep 2
+    done
+  ) &
+fi
+
 with_env_prefix --user openclaw OPENCLAW_ -- openclaw gateway --allow-unconfigured
