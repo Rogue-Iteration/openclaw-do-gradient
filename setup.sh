@@ -41,16 +41,17 @@ fi
 
 # ── 2. Install Node.js + pnpm + OpenClaw ──────────────────────────
 echo "[3/9] Installing Node.js, pnpm, and OpenClaw..."
-sudo -iu "$OPENCLAW_USER" bash <<'NODEEOF'
-  set -euo pipefail
+sudo -iu "$OPENCLAW_USER" bash <<NODEEOF
+  set -eo pipefail
   export SHELL=/bin/bash
+  export OPENCLAW_VERSION="${OPENCLAW_VERSION}"
 
   # nvm
-  if [ ! -d "$HOME/.nvm" ]; then
+  if [ ! -d "\$HOME/.nvm" ]; then
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
   fi
-  export NVM_DIR="$HOME/.nvm"
-  . "$NVM_DIR/nvm.sh"
+  export NVM_DIR="\$HOME/.nvm"
+  . "\$NVM_DIR/nvm.sh"
   nvm install --lts
   nvm use --lts
   nvm alias default lts/*
@@ -58,12 +59,12 @@ sudo -iu "$OPENCLAW_USER" bash <<'NODEEOF'
   # pnpm
   npm install -g pnpm
   pnpm setup
-  export PNPM_HOME="$HOME/.local/share/pnpm"
-  export PATH="$PNPM_HOME:$PATH"
+  export PNPM_HOME="\$HOME/.local/share/pnpm"
+  export PATH="\$PNPM_HOME:\$PATH"
 
   # openclaw
-  pnpm add -g "openclaw@${OPENCLAW_VERSION:-2026.2.9}"
-  echo "OpenClaw version: $(openclaw --version)"
+  pnpm add -g "openclaw@\${OPENCLAW_VERSION}"
+  echo "OpenClaw version: \$(openclaw --version)"
 NODEEOF
 
 # ── 3. Clone repo ────────────────────────────────────────────────
