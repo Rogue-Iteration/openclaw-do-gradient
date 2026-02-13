@@ -8,8 +8,8 @@
   },
   "global_settings": {
     "significance_threshold": 6,
-    "cheap_model": "qwen3-32b",
-    "strong_model": "claude-sonnet-4-5-20250514"
+    "cheap_model": "alibaba-qwen3-32b",
+    "strong_model": "openai-gpt-oss-120b"
   },
   "tickers": [
     {
