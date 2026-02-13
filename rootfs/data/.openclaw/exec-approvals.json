@@ -1,37 +1,35 @@
 {
     "version": 1,
-    "allowlist": [
-        {
-            "agent": "*",
-            "pattern": "python3"
-        },
-        {
-            "agent": "*",
-            "pattern": "/usr/bin/python3"
-        },
-        {
-            "agent": "*",
-            "pattern": "/data/workspace/skills/**/*.py"
-        },
-        {
-            "agent": "*",
-            "pattern": "cat"
-        },
-        {
-            "agent": "*",
-            "pattern": "ls"
-        },
-        {
-            "agent": "*",
-            "pattern": "head"
-        },
-        {
-            "agent": "*",
-            "pattern": "tail"
-        },
-        {
-            "agent": "*",
-            "pattern": "pip3"
+    "socket": {},
+    "defaults": {},
+    "agents": {
+        "*": {
+            "allowlist": [
+                {
+                    "pattern": "python3"
+                },
+                {
+                    "pattern": "/usr/bin/python3"
+                },
+                {
+                    "pattern": "/data/workspace/skills/**/*.py"
+                },
+                {
+                    "pattern": "cat"
+                },
+                {
+                    "pattern": "ls"
+                },
+                {
+                    "pattern": "head"
+                },
+                {
+                    "pattern": "tail"
+                },
+                {
+                    "pattern": "pip3"
+                }
+            ]
         }
-    ]
+    }
 }
