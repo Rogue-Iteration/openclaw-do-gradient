@@ -8,7 +8,7 @@
   },
   "global_settings": {
     "significance_threshold": 6,
-    "cheap_model": "alibaba-qwen3-32b",
+    "cheap_model": "openai-gpt-oss-120b",
     "strong_model": "openai-gpt-oss-120b"
   },
   "tickers": [

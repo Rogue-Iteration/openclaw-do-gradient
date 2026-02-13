@@ -6,8 +6,8 @@ Calls Gradient Serverless Inference to analyze gathered research data,
 score significance, and determine whether to alert the user.
 
 Uses a two-pass model routing strategy:
-- Pass 1: Cheap model (e.g., qwen3-32b) for initial significance scoring
-- Pass 2: Strong model (e.g., claude-sonnet-4-5-20250514) if score > threshold (deep analysis)
+- Pass 1: Quick model for initial significance scoring
+- Pass 2: Strong model if score > threshold (deep analysis)
 
 Usage:
     python3 analyze.py --ticker CAKE --data /path/to/research.md --verbose
@@ -26,8 +26,8 @@ import requests
 GRADIENT_INFERENCE_URL = "https://inference.do-ai.run/v1/chat/completions"
 
 # Default models (can be overridden via watchlist global_settings)
-DEFAULT_CHEAP_MODEL = "qwen3-32b"
-DEFAULT_STRONG_MODEL = "claude-sonnet-4-5-20250514"
+DEFAULT_CHEAP_MODEL = "openai-gpt-oss-120b"
+DEFAULT_STRONG_MODEL = "openai-gpt-oss-120b"
 
 # Score threshold for triggering the second pass
 DEEP_ANALYSIS_THRESHOLD = 5
