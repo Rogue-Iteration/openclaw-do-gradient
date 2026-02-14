@@ -20,7 +20,7 @@ ENV_FILE="$SCRIPT_DIR/.env"
 DROPLET_NAME="openclaw-research"
 DROPLET_SIZE="s-1vcpu-2gb"
 DROPLET_IMAGE="docker-20-04"
-REPO_URL="https://github.com/Rogue-Iteration/thebigclaw.git"
+REPO_URL="https://github.com/Rogue-Iteration/TheBigClaw.git"
 REMOTE_DIR="/opt/openclaw"
 
 DRY_RUN=false

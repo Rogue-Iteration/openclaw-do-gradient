@@ -124,7 +124,7 @@ Telegram → OpenClaw Gateway → Gradient AI (GPT OSS 120B)
 ### 1. Prepare Your Environment
 
 ```bash
-git clone https://github.com/Rogue-Iteration/thebigclaw.git
+git clone https://github.com/Rogue-Iteration/TheBigClaw.git
 cd thebigclaw
 cp .env.example .env
 ```
@@ -230,7 +230,7 @@ cd /opt/openclaw && bash deploy.sh
 If you don't want to use DigitalOcean, you can run the bot anywhere with Docker:
 
 ```bash
-git clone https://github.com/Rogue-Iteration/thebigclaw.git
+git clone https://github.com/Rogue-Iteration/TheBigClaw.git
 cd thebigclaw
 cp .env.example .env
 # Fill in .env
