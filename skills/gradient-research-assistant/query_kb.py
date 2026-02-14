@@ -16,90 +16,11 @@ import os
 import sys
 from typing import Optional
 
-import boto3
 import requests
-from botocore.config import Config as BotoConfig
 
 # Gradient inference endpoint (used for RAG-enhanced queries)
 GRADIENT_INFERENCE_URL = "https://inference.do-ai.run/v1/chat/completions"
 DO_API_BASE = "https://api.digitalocean.com"
-
-
-def _get_spaces_client():
-    """Create an S3-compatible client for DO Spaces."""
-    return boto3.client(
-        "s3",
-        endpoint_url=os.environ.get("DO_SPACES_ENDPOINT", "https://nyc3.digitaloceanspaces.com"),
-        aws_access_key_id=os.environ.get("DO_SPACES_ACCESS_KEY", ""),
-        aws_secret_access_key=os.environ.get("DO_SPACES_SECRET_KEY", ""),
-        config=BotoConfig(signature_version="s3v4"),
-    )
-
-
-def _fetch_research_from_spaces(query: str) -> dict:
-    """Fetch research files from Spaces bucket matching the query ticker.
-
-    Reads up to 5 most recent research files for the ticker mentioned in the query.
-    Returns results in the same format as query_knowledge_base.
-    """
-    bucket = os.environ.get("DO_SPACES_BUCKET", "openclawresearch")
-
-    # Extract ticker from query (look for $TICKER or just TICKER as uppercase word)
-    import re
-    ticker_match = re.search(r'\$([A-Z]{1,6})\b', query)
-    if not ticker_match:
-        # Try to find uppercase word that looks like a ticker
-        ticker_match = re.search(r'\b([A-Z]{1,6})\b', query)
-
-    if not ticker_match:
-        return {"success": True, "results": [], "message": "No ticker found in query."}
-
-    ticker = ticker_match.group(1)
-
-    try:
-        client = _get_spaces_client()
-
-        # List research files for this ticker (prefix: research/)
-        resp = client.list_objects_v2(Bucket=bucket, Prefix="research/", MaxKeys=100)
-        all_objects = resp.get("Contents", [])
-
-        # Filter for files matching this ticker
-        matching = [
-            obj for obj in all_objects
-            if ticker in obj["Key"].upper()
-        ]
-
-        # Sort by last modified (newest first), take top 5
-        matching.sort(key=lambda x: x.get("LastModified", ""), reverse=True)
-        matching = matching[:5]
-
-        if not matching:
-            return {"success": True, "results": [], "message": f"No research files found for {ticker}."}
-
-        # Fetch content of each matching file
-        results = []
-        for obj in matching:
-            try:
-                file_resp = client.get_object(Bucket=bucket, Key=obj["Key"])
-                content = file_resp["Body"].read().decode("utf-8")
-                # Truncate to ~2000 chars per file to keep context manageable
-                if len(content) > 2000:
-                    content = content[:2000] + "\n\n[...truncated]"
-                results.append({
-                    "content": content,
-                    "metadata": {"source": obj["Key"]},
-                    "score": 1.0,
-                })
-            except Exception:
-                continue
-
-        return {
-            "success": True,
-            "results": results,
-            "message": f"Found {len(results)} research files for {ticker} in Spaces.",
-        }
-    except Exception as e:
-        return {"success": False, "results": [], "message": f"Spaces query failed: {str(e)}"}
 
 
 def query_knowledge_base(
@@ -107,7 +28,7 @@ def query_knowledge_base(
     kb_uuid: Optional[str] = None,
     api_token: Optional[str] = None,
 ) -> dict:
-    """Query the Knowledge Base, falling back to Spaces if KB API is unavailable.
+    """Query the Gradient Knowledge Base for research documents.
 
     Args:
         query: The search query
@@ -120,9 +41,10 @@ def query_knowledge_base(
     kb_uuid = kb_uuid or os.environ.get("GRADIENT_KB_UUID", "")
     api_token = api_token or os.environ.get("DO_API_TOKEN", "")
 
-    if not kb_uuid or not api_token:
-        # Skip KB API, go directly to Spaces
-        return _fetch_research_from_spaces(query)
+    if not kb_uuid:
+        return {"success": False, "results": [], "message": "No GRADIENT_KB_UUID configured."}
+    if not api_token:
+        return {"success": False, "results": [], "message": "No DO_API_TOKEN configured."}
 
     try:
         headers = {
@@ -144,9 +66,8 @@ def query_knowledge_base(
             "results": results,
             "message": f"Found {len(results)} relevant documents.",
         }
-    except requests.RequestException:
-        # KB API unavailable (404 from Droplets) — fall back to Spaces
-        return _fetch_research_from_spaces(query)
+    except requests.RequestException as e:
+        return {"success": False, "results": [], "message": f"KB query failed: {str(e)}"}
 
 
 def build_rag_prompt(query: str, kb_results: list[dict]) -> str:
