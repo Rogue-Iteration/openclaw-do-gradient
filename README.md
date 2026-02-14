@@ -1,33 +1,30 @@
 ```
-                           ___
-                        .-'   `'.
-                       /         \
-                      |    $$     ;    "The chart sees it first."
-                      |    {}     |
-                 _.-- '. \_____/ .'
-               .'     / `'---'` \
-              /      /  /)    (\  \
-             |      | .'/      \'. |      📈 📉 📊
-             |      |/ /  ____  \ \|
-              \     / /  |    |  \ \     ┌──────────────────┐
-               `'-.|/    | $$ |   \|     │ BUY  HOLD  SELL  │
-                   /     |____|    \     │ ███░ ████░ ██░░░ │
-            _.---'`  /              `    └──────────────────┘
-          .'       .' '.          .' '.
-         /  _    .'     '-.  _.-'     '.
-        |  ( `.'            `           |
-       /    `. \     STONKS    / .'    \
-      | .  .  ` `.     ↗↗    .' `  .   |
-      |  \  \    | `'------'` |   /  / |
-       \  `. `.  |            |  .' .'
-        \    `-. \   🦞🦞🦞   / .-`
-         `-._   `'-.____.--'`  _.-'
-              `'--._________.--'`
+        ╔══════════════════════════════════════════════════════════════╗
+        ║            T H E   B I G   C L A W                         ║
+        ║            An OpenClaw + Gradient AI Demo                  ║
+        ╚══════════════════════════════════════════════════════════════╝
+
+           \)  (/)                                          (\  (/
+            \  / |   ,    ,          ,  /)   (\  ,          | \  /
+      /\_/\  \/  |  /|   /|    _.---'`/  \ /  \`'---.     |  \/  /\_/\
+     / o o \     | / |  / |  .'  🦞  |    V    |  🦞  `.  | /  / o  o \
+    (   "   )    |/  | /  | /  $$$   | \(  )/ |   $$$  \ |/  (   "    )
+     \  ^  /     /   |/   |/  STONKS  |  \  /  | STONKS  \|   \   ^  /
+      |||||     /    /    |    ↗↗↗    |  (  )  |   ↗↗↗    |    \  |||||
+      |||||    /          |           | /    \ |           |     \ |||||
+     /|   |\              `-._ 🦞 _.-'|/ 🦞  \|`-._  _.-'       \|   |\
+    (_|   |_)                 `---'                  `---'         (_|   |_)
+
+      BULL                    T H E   L O B S T E R                    BEAR
+
+            "Greed is good. Crustaceans are better." — Lobster Gekko
 ```
 
-# OpenClaw + Gradient AI Research Assistant
+# 🦞 The Big Claw
 
-A proactive investment research assistant powered by [Gradient AI](https://www.digitalocean.com/products/ai-ml) models via [OpenClaw](https://openclaw.ai). Deploy it to a DigitalOcean Droplet in minutes.
+> *An [OpenClaw](https://openclaw.ai) + [Gradient AI](https://www.digitalocean.com/products/ai-ml) Demo*
+
+A proactive investment research team powered by LLM agents. Four AI analysts monitor your stock watchlist, gather intelligence from SEC filings, Reddit, news, and charts — then report back via Telegram. Deploy to a DigitalOcean Droplet in minutes.
 
 ---
 
@@ -65,7 +62,7 @@ A proactive investment research assistant powered by [Gradient AI](https://www.d
 
 ## What This Is (And Isn't)
 
-This is a **fun showcase** of what's possible when you combine [OpenClaw's](https://openclaw.ai) multi-agent framework with [Gradient AI](https://www.digitalocean.com/products/ai-ml) models. You get a team of four AI analysts working together to research stocks and report back via Telegram. It's cool. It's kinda wild. It actually works.
+This is a **fun showcase** of what's possible when you combine [OpenClaw's](https://openclaw.ai) multi-agent framework with [Gradient AI](https://www.digitalocean.com/products/ai-ml) models. The Big Claw gives you a team of four AI analysts working together to research stocks and report back via Telegram. It's cool. It's kinda wild. It actually works.
 
 **What it is NOT:**
 - ❌ Production-grade financial software
@@ -126,8 +123,8 @@ Telegram → OpenClaw Gateway → Gradient AI (GPT OSS 120B)
 ### 1. Prepare Your Environment
 
 ```bash
-git clone https://github.com/Rogue-Iteration/openclaw-do-gradient.git
-cd openclaw-do-gradient
+git clone https://github.com/Rogue-Iteration/thebigclaw.git
+cd thebigclaw
 cp .env.example .env
 ```
 
@@ -232,8 +229,8 @@ cd /opt/openclaw && bash deploy.sh
 If you don't want to use DigitalOcean, you can run the bot anywhere with Docker:
 
 ```bash
-git clone https://github.com/Rogue-Iteration/openclaw-do-gradient.git
-cd openclaw-do-gradient
+git clone https://github.com/Rogue-Iteration/thebigclaw.git
+cd thebigclaw
 cp .env.example .env
 # Fill in .env
 docker compose up -d

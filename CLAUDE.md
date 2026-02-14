@@ -87,7 +87,7 @@ docker compose up -d --build        # Rebuild and start
 ### Running Tests
 
 ```bash
-cd /Users/simoneichenauer/Development/openclaw-do-gradient
+cd /Users/simoneichenauer/Development/thebigclaw
 python3 -m pytest tests/ -v
 ```
 

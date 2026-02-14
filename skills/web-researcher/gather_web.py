@@ -26,7 +26,7 @@ import requests
 
 # ─── User-Agent for polite scraping ───────────────────────────────
 
-USER_AGENT = "GradientResearchAssistant/1.0 (demo; +https://github.com/Rogue-Iteration/openclaw-do-gradient)"
+USER_AGENT = "GradientResearchAssistant/1.0 (demo; +https://github.com/Rogue-Iteration/thebigclaw)"
 HEADERS = {"User-Agent": USER_AGENT}
 
 # SEC EDGAR requires a specific user agent with contact info
