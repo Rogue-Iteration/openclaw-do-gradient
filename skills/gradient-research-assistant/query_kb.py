@@ -111,7 +111,7 @@ and note when information might be outdated.
 
 def query_with_rag(
     query: str,
-    model: str = "qwen3-32b",
+    model: str = "openai-gpt-oss-120b",
     kb_uuid: Optional[str] = None,
     api_key: Optional[str] = None,
     api_token: Optional[str] = None,

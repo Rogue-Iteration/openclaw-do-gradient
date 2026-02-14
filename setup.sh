@@ -228,6 +228,9 @@ JSON
     "/usr/bin/python3" \
     "python3 *" \
     "cat" \
+    "python" \
+    "/usr/bin/python" \
+    "python *" \
     "ls" \
     "head" \
     "tail" \
