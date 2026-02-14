@@ -159,11 +159,8 @@ def trigger_kb_reindex(
         if not ds_id:
             return {"success": False, "message": "Data source has no UUID."}
 
-        index_url = f"{DO_API_BASE}/v2/gen-ai/knowledge_bases/{kb_uuid}/indexing_jobs"
-        index_payload = {
-            "data_source_id": ds_id,
-        }
-        resp = requests.post(index_url, headers=headers, json=index_payload, timeout=15)
+        index_url = f"{DO_API_BASE}/v2/gen-ai/knowledge_bases/{kb_uuid}/data_sources/{ds_id}/indexing_jobs"
+        resp = requests.post(index_url, headers=headers, json={}, timeout=15)
         resp.raise_for_status()
 
         return {
