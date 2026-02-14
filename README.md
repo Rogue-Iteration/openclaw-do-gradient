@@ -1,6 +1,92 @@
+```
+                           ___
+                        .-'   `'.
+                       /         \
+                      |    $$     ;    "The chart sees it first."
+                      |    {}     |
+                 _.-- '. \_____/ .'
+               .'     / `'---'` \
+              /      /  /)    (\  \
+             |      | .'/      \'. |      📈 📉 📊
+             |      |/ /  ____  \ \|
+              \     / /  |    |  \ \     ┌──────────────────┐
+               `'-.|/    | $$ |   \|     │ BUY  HOLD  SELL  │
+                   /     |____|    \     │ ███░ ████░ ██░░░ │
+            _.---'`  /              `    └──────────────────┘
+          .'       .' '.          .' '.
+         /  _    .'     '-.  _.-'     '.
+        |  ( `.'            `           |
+       /    `. \     STONKS    / .'    \
+      | .  .  ` `.     ↗↗    .' `  .   |
+      |  \  \    | `'------'` |   /  / |
+       \  `. `.  |            |  .' .'
+        \    `-. \   🦞🦞🦞   / .-`
+         `-._   `'-.____.--'`  _.-'
+              `'--._________.--'`
+```
+
 # OpenClaw + Gradient AI Research Assistant
 
 A proactive investment research assistant powered by [Gradient AI](https://www.digitalocean.com/products/ai-ml) models via [OpenClaw](https://openclaw.ai). Deploy it to a DigitalOcean Droplet in minutes.
+
+---
+
+```
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                                                                             ║
+║   ░██╗░░░░░░░██╗░█████╗░██████╗░███╗░░██╗██╗███╗░░██╗░██████╗░            ║
+║   ░██║░░██╗░░██║██╔══██╗██╔══██╗████╗░██║██║████╗░██║██╔════╝░            ║
+║   ░╚██╗████╗██╔╝███████║██████╔╝██╔██╗██║██║██╔██╗██║██║░░██╗░            ║
+║   ░░████╔═████║░██╔══██║██╔══██╗██║╚████║██║██║╚████║██║░░╚██╗            ║
+║   ░░╚██╔╝░╚██╔╝░██║░░██║██║░░██║██║░╚███║██║██║░╚███║╚██████╔╝            ║
+║   ░░░╚═╝░░░╚═╝░░╚═╝░░╚═╝╚═╝░░╚═╝╚═╝░░╚══╝╚═╝╚═╝░░╚══╝░╚═════╝░            ║
+║                                                                             ║
+║   🌴🌴🌴🌴🌴🌴🌴🌴🌴🌴🌴🌴🌴🌴🌴🌴🌴🌴🌴🌴🌴🌴🌴🌴🌴🌴🌴   ║
+║                                                                             ║
+║   THIS SOFTWARE IS A DEMO.  A PROTOTYPE.  A VIBE.                          ║
+║                                                                             ║
+║   OpenClaw is early-stage software with KNOWN SECURITY VULNERABILITIES.     ║
+║   This project lets LLM agents execute arbitrary Python on your machine.    ║
+║   There is NO sandboxing, NO rate limiting, and NO safety net.              ║
+║                                                                             ║
+║   🚨  YOU RUN THIS AT YOUR OWN RISK.  🚨                                   ║
+║                                                                             ║
+║   And while we're here — WATCH YOUR TOKEN USAGE.                            ║
+║   These four agents will burn through API credits like it's Miami in '85.   ║
+║   Every research cycle, every cron trigger, every follow-up question —      ║
+║   that's tokens. Set billing alerts. Check your dashboard. Be vigilant.     ║
+║                                                                             ║
+║   Don't say we didn't warn you. 🕶️                                         ║
+║                                                                             ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+```
+
+---
+
+## What This Is (And Isn't)
+
+This is a **fun showcase** of what's possible when you combine [OpenClaw's](https://openclaw.ai) multi-agent framework with [Gradient AI](https://www.digitalocean.com/products/ai-ml) models. You get a team of four AI analysts working together to research stocks and report back via Telegram. It's cool. It's kinda wild. It actually works.
+
+**What it is NOT:**
+- ❌ Production-grade financial software
+- ❌ A secure, hardened application
+- ❌ Financial advice of any kind
+- ❌ A reason to YOLO your 401k based on what a lobster-themed chatbot tells you
+
+OpenClaw has **major security limitations** in its current state. This project is meant to show the *potential* of the platform — not to be deployed in any environment where security matters. See [Known Limitations](#known-limitations--security-caveats) below.
+
+---
+
+## Meet the Team
+
+| Agent | Role | Vibe | Specialty |
+|-------|------|------|-----------|
+| 🧠 **Max** | Fundamental Analyst & Team Lead | The senior quant who's seen every cycle. Dry, nerdy humor. Drops obscure financial history references. | Synthesizes news + filings + sentiment into investment theses. Delivers the morning briefing. |
+| 📰 **Nova** | Web Researcher | The pedantic librarian. "It's a Form 8-K, not 'some SEC filing'." | SEC filings, press releases, official sources. Citation-obsessed. Primary source purist. |
+| 📱 **Luna** | Social Researcher | Trend whisperer with Instagram-pro polish. Reads Reddit like a first language. | Social sentiment, retail crowd behavior, FOMO detection. Spots hype vs. momentum. |
+| 📈 **Ace** | Technical Analyst | YouTuber chartist energy. "Alright, let's break this chart down." No BS. | Price action, support/resistance, indicators (RSI, MACD, Bollinger). The chart sees it first. |
+
+---
 
 ## What It Does
 
@@ -9,7 +95,7 @@ A proactive investment research assistant powered by [Gradient AI](https://www.d
 - 🧠 Stores findings in a Gradient Knowledge Base for RAG queries
 - 🚨 Proactively alerts you via Telegram when something significant happens
 - 💬 Answers questions about your watchlist using accumulated knowledge
-- 🤖 Four specialized agents: Max (fundamentals), Nova (web), Luna (social), Ace (technicals)
+- 🤖 Four specialized agents working as a coordinated research team
 
 ## Architecture
 
@@ -20,6 +106,20 @@ Telegram → OpenClaw Gateway → Gradient AI (GPT OSS 120B)
                 ↓
          DO Spaces + Gradient KB
 ```
+
+## Known Limitations & Security Caveats
+
+> **This section exists because we believe in being upfront.** OpenClaw is exciting tech, but it's not ready for anything resembling production use in sensitive environments.
+
+| Risk | Details |
+|------|---------|
+| 🔓 **Arbitrary Code Execution** | Agents execute Python via `exec`. There is no sandbox. A sufficiently creative (or confused) agent could do anything your host OS allows. |
+| 🚫 **No Rate Limiting** | Nothing prevents agents from making unlimited API calls. A runaway loop = a runaway bill. |
+| 🔑 **Minimal Authentication** | The only access control is Telegram pairing. Anyone with bot access can trigger agent actions. |
+| 💸 **Token Burn** | Each research cycle across all 4 agents consumes a significant number of tokens. Cron-triggered cycles compound this. **Set billing alerts on your Gradient AI account.** |
+| 🌐 **Network Exposure** | Agents make outbound HTTP requests to third-party APIs (Reddit, news sources, SEC EDGAR). No request filtering is applied. |
+
+---
 
 ## Quick Start
 

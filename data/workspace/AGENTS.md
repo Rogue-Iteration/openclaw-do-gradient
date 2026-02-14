@@ -35,7 +35,7 @@
 ## @Mention Routing
 
 Users can address specific team members by starting their message with `@AgentName:`.
-When this happens, forward the message (minus the prefix) to the correct agent via `sessions_send` and relay their response verbatim.
+When this happens, forward the message (minus the prefix) to the correct agent via `sessions_spawn` and relay their response verbatim.
 
 | Mention | Agent ID |
 |---------|----------|

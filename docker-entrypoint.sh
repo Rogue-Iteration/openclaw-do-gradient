@@ -116,6 +116,9 @@ if [ ! -f "$STATE_DIR/openclaw.json" ]; then
   "tools": {
     "exec": {
       "security": "allowlist"
+    },
+    "agentToAgent": {
+      "enabled": true
     }
   }
 }
