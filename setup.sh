@@ -169,6 +169,8 @@ sudo -iu "$OPENCLAW_USER" bash <<CFGEOF
       {
         "id": "web-researcher",
         "name": "Nova",
+        "default": false,
+        "workspace": "\\$HOME/.openclaw/agents/web-researcher/agent",
         "model": {
           "primary": "gradient/openai-gpt-oss-120b"
         },
@@ -179,6 +181,8 @@ sudo -iu "$OPENCLAW_USER" bash <<CFGEOF
       {
         "id": "fundamental-analyst",
         "name": "Max",
+        "default": true,
+        "workspace": "\\$HOME/.openclaw/agents/fundamental-analyst/agent",
         "model": {
           "primary": "gradient/openai-gpt-oss-120b"
         },
@@ -240,7 +244,7 @@ JSON
 
   # ── Copy persona files for each agent ──
   for agent in ${AGENTS[@]}; do
-    AGENT_WS="\$WORKSPACE_DIR/agents/\$agent"
+    AGENT_WS="\$STATE_DIR/agents/\$agent/agent"
     mkdir -p "\$AGENT_WS"
     SRC_DIR="\$REPO_DIR/data/workspaces/\$agent"
     if [ -d "\$SRC_DIR" ]; then
@@ -263,10 +267,20 @@ JSON
 
   # ── Symlink skills for each agent ──
   for agent in ${AGENTS[@]}; do
-    AGENT_WS="\$WORKSPACE_DIR/agents/\$agent"
+    AGENT_WS="\$STATE_DIR/agents/\$agent/agent"
     SKILL_DIR="\$REPO_DIR/skills/\$agent"
-    if [ -d "\$SKILL_DIR" ] && [ ! -e "\$AGENT_WS/skills" ]; then
-      ln -s "\$SKILL_DIR" "\$AGENT_WS/skills"
+    SHARED_SKILL_DIR="\$REPO_DIR/skills/gradient-research-assistant"
+
+    # Agent-specific skills
+    if [ -d "\$SKILL_DIR" ] && [ ! -e "\$AGENT_WS/skills/\$agent" ]; then
+      mkdir -p "\$AGENT_WS/skills"
+      ln -s "\$SKILL_DIR" "\$AGENT_WS/skills/\$agent"
+    fi
+
+    # Shared skills (so both agents can access common tools)
+    if [ -d "\$SHARED_SKILL_DIR" ] && [ ! -e "\$AGENT_WS/skills/gradient-research-assistant" ]; then
+      mkdir -p "\$AGENT_WS/skills"
+      ln -s "\$SHARED_SKILL_DIR" "\$AGENT_WS/skills/gradient-research-assistant"
     fi
   done
 
