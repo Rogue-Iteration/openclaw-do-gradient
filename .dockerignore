@@ -1,0 +1,35 @@
+# Version control
+.git
+.gitignore
+
+# Tests (not needed in production image)
+tests/
+.pytest_cache/
+
+# Environment files (secrets — never bake into image)
+.env
+.env.*
+!.env.example
+
+# Python caches
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+
+# OS files
+.DS_Store
+
+# Editor / IDE
+.vscode/
+.idea/
+
+# CI/CD
+.github/
+
+# Documentation (not needed at runtime)
+CLAUDE.md
+*.md
+!data/**/*.md
+!skills/**/*.md

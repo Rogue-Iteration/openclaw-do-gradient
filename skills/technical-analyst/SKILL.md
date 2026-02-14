@@ -23,7 +23,7 @@ python3 gather_technicals.py --ticker HOG --json
 
 **Output**: Markdown report with price summary, moving averages (SMA 20/50/200), RSI(14), MACD, Bollinger Bands, volume analysis, and detected signals (crossovers, divergences, breakouts).
 
-**Requires**: `yfinance` package (installed on the Droplet via setup.sh).
+**Requires**: `yfinance` package (installed via `requirements.txt` in the Docker image).
 
 ### Shared Tools (from gradient-research-assistant)
 

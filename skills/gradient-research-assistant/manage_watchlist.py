@@ -10,7 +10,7 @@ next heartbeat cycle.
 
 Storage backends:
 - Local file (default, for development/testing)
-- DO Spaces (for App Platform, where filesystem is ephemeral)
+- DO Spaces (for backup/sync across deploys)
 
 Set DO_SPACES_* env vars to enable Spaces-backed persistence.
 
@@ -88,7 +88,7 @@ def load_watchlist(filepath: str = DEFAULT_WATCHLIST_PATH, client=None) -> dict:
     """Load watchlist from Spaces (if configured) or local file.
 
     Priority:
-    1. DO Spaces (if env vars set or client provided) — for App Platform
+    1. DO Spaces (if env vars set or client provided) — for persistence across deploys
     2. Local file — for development/testing
 
     Args:

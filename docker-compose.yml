@@ -1,0 +1,23 @@
+# ═══════════════════════════════════════════════════════════════════
+# OpenClaw + Gradient AI — Docker Compose
+# ═══════════════════════════════════════════════════════════════════
+# Usage:
+#   cp .env.example .env   # fill in your values
+#   docker compose up -d   # start the bot
+#   docker compose logs -f # view logs
+# ═══════════════════════════════════════════════════════════════════
+
+services:
+  openclaw:
+    build: .
+    container_name: openclaw-research
+    restart: always
+    env_file: .env
+    volumes:
+      - openclaw-state:/root/.openclaw
+    ports:
+      - "3120:3120"
+
+volumes:
+  openclaw-state:
+    driver: local

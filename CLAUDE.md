@@ -2,11 +2,11 @@
 
 ## Project Overview
 
-A proactive investment research assistant running on a **DigitalOcean Droplet**, powered by Gradient AI models via OpenClaw. Four specialized agents (Max, Nova, Luna, Ace) monitor a stock watchlist, gather research from multiple sources, and alert the user via Telegram.
+A proactive investment research assistant running in **Docker** on a DigitalOcean Droplet, powered by Gradient AI models via OpenClaw. Four specialized agents (Max, Nova, Luna, Ace) monitor a stock watchlist, gather research from multiple sources, and alert the user via Telegram.
 
 ## Architecture
 
-- **Runtime**: OpenClaw gateway running as a systemd service on an Ubuntu Droplet
+- **Runtime**: OpenClaw gateway running in a Docker container
 - **AI Backend**: Gradient AI (GPT OSS 120B, Llama 3.3, DeepSeek R1, Qwen3) via DO Inference API
 - **Agents**: Max (fundamental analyst, default), Nova (web researcher), Luna (social researcher), Ace (technical analyst)
 - **Messaging**: Telegram bot integration
@@ -20,8 +20,9 @@ A proactive investment research assistant running on a **DigitalOcean Droplet**,
 | Language      | Python 3, Bash                              |
 | Testing       | pytest, responses (HTTP mocking), moto (S3) |
 | Dependencies  | requests, beautifulsoup4, feedparser, boto3, yfinance |
-| Infra         | DigitalOcean Droplet, Spaces, Gradient AI   |
+| Infra         | Docker, DigitalOcean Droplet, Spaces, Gradient AI |
 | Gateway       | OpenClaw (Node.js / pnpm)                   |
+| CI/CD         | GitHub Actions → GHCR                       |
 
 ## Key Directories
 
@@ -40,22 +41,27 @@ tests/                               → pytest unit tests
 **You are expected to handle production deployments yourself.** The workflow is:
 
 1. Commit and push changes to `main`
-2. SSH into the Droplet: `ssh openclaw@<droplet-ip>`
-3. Run: `cd ~/openclaw-do-gradient && bash deploy.sh`
-4. Verify: `systemctl status openclaw`
+2. Run locally: `bash install.sh --update`
+3. Or SSH into the Droplet: `ssh root@<droplet-ip>` → `cd /opt/openclaw && bash deploy.sh`
 
-`deploy.sh` pulls the latest code, updates persona files, syncs agent configs, installs Python deps, and restarts the OpenClaw systemd service.
+`install.sh --update` SCPs the `.env`, pulls latest code, and runs `docker compose up -d --build`.
+`deploy.sh` does `git pull` + `docker compose up -d --build` directly on the Droplet.
 
 ### First-Time Setup
 
-For provisioning a new Droplet from scratch, use `setup.sh` (run as root). See `README.md` for full instructions.
+For deploying a new Droplet from scratch:
+1. Fill out `.env` (see `.env.example`)
+2. Run `bash install.sh`
 
-### Service Management
+See `README.md` for full prerequisites guide.
+
+### Container Management
 
 ```bash
-systemctl status openclaw       # Check status
-journalctl -u openclaw -f       # Tail logs
-sudo systemctl restart openclaw  # Restart
+docker logs -f openclaw-research    # Tail logs
+docker compose restart              # Restart
+docker compose down                 # Stop
+docker compose up -d --build        # Rebuild and start
 ```
 
 ## Droplet Safety
@@ -64,10 +70,9 @@ sudo systemctl restart openclaw  # Restart
 >
 > This includes but is not limited to:
 > - Deleting or overwriting files on the Droplet
-> - Stopping or disabling the `openclaw` systemd service
-> - Modifying `/etc/openclaw.env` or `~/.openclaw/openclaw.json`
-> - Removing packages or changing system configuration
-> - Any `rm`, `apt remove`, or destructive SSH commands
+> - Stopping or removing Docker containers
+> - Modifying `.env` or OpenClaw state files
+> - Any `rm`, destructive SSH commands, or `docker system prune`
 >
 > Non-destructive reads (checking logs, status, listing files) are fine without asking.
 
@@ -96,21 +101,14 @@ Mock data and fixtures live in `tests/fixtures/`. Tests use `responses` for HTTP
   - A module-level docstring explaining what the skill does
   - Docstrings on all public functions describing purpose, parameters, and return values
   - Inline comments for non-obvious logic
-- Bash scripts should have header comments and section markers (see `setup.sh` and `deploy.sh` for examples)
+- Bash scripts should have header comments and section markers
 - Persona files (IDENTITY.md, AGENTS.md, HEARTBEAT.md) use Markdown
 
 ## Environment Variables
 
-All secrets live in `/etc/openclaw.env` on the Droplet (see `.env.example` for the template). **Never commit real secrets.**
+All secrets live in `.env` (locally and on the Droplet). **Never commit real secrets.**
 
-Required:
-- `GRADIENT_API_KEY` — Gradient AI inference API key
-- `TELEGRAM_BOT_TOKEN` — Telegram bot token
-- `TELEGRAM_ALLOWED_IDS` — Comma-separated Telegram user IDs
-
-DO Spaces / Knowledge Base:
-- `DO_API_TOKEN`, `DO_SPACES_ACCESS_KEY`, `DO_SPACES_SECRET_KEY`
-- `DO_SPACES_ENDPOINT`, `DO_SPACES_BUCKET`, `GRADIENT_KB_UUID`
+See `.env.example` for the full list with inline documentation.
 
 ## Common Workflows
 
@@ -120,10 +118,10 @@ DO Spaces / Knowledge Base:
 2. Add inline documentation (module docstring + function docstrings)
 3. Write tests in `tests/test_<skill_name>.py` (TDD preferred)
 4. Run `python3 -m pytest tests/ -v` to verify
-5. Deploy to Droplet via `deploy.sh`
+5. Push to `main` → CI runs tests → deploy with `bash install.sh --update`
 
 ### Updating agent personas
 
 1. Edit the relevant files in `data/workspaces/<agent-name>/`
-2. Run `deploy.sh` on the Droplet — it copies persona files to each agent's workspace
-3. Verify with `journalctl -u openclaw -f` after restart
+2. Deploy: `bash install.sh --update` (or `deploy.sh` on the Droplet)
+3. The Docker entrypoint syncs persona files on every container start
