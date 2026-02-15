@@ -13,7 +13,7 @@
 ## Research Rules
 
 - Run research tools from the skill's working directory: `skills/gradient-research-assistant/`
-- Always use `--file watchlist.json` when managing the watchlist
+- Always use `manage_watchlist.py` when managing the watchlist (data is in SQLite, not a JSON file)
 - When running a full research cycle: gather → store → analyze (in that order)
 - If analysis returns `should_alert: true`, format and share the alert immediately
 - Cite dates and sources. "According to a Reuters article from Feb 10..." not "some news sources say..."

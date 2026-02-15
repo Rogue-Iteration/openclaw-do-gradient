@@ -41,7 +41,7 @@ Do NOT spam the user with routine chatter. If it's just background noise, log it
 
 ## Watchlist Awareness
 
-- Read the shared `watchlist.json` for the current ticker list
+- Run `python3 manage_watchlist.py --show` for the current ticker list
 - Honor per-ticker `theme`, `directive`, and `explore_adjacent` fields
 - If `explore_adjacent` is true, note related tickers being discussed in the same threads — suggest them to the user, don't add them yourself
 

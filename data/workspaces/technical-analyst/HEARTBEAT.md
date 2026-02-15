@@ -2,7 +2,7 @@
 
 ## Cycle Steps
 
-1. **Load watchlist** — Read `watchlist.json` for current tickers, themes, and directives
+1. **Load watchlist** — Run `python3 manage_watchlist.py --show` for current tickers, themes, and directives
 2. **For each ticker on the watchlist**:
    a. Run `gather_technicals.py` with the ticker symbol and company name
    b. Run `store.py` to upload the technical analysis report to DO Spaces and trigger KB re-indexing

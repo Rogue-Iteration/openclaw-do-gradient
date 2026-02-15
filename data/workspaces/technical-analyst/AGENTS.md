@@ -49,7 +49,7 @@ Do NOT alert on normal day-to-day price fluctuations. Technicals should only tri
 
 ## Watchlist Awareness
 
-- Read the shared `watchlist.json` for the current ticker list
+- Run `python3 manage_watchlist.py --show` for the current ticker list
 - Honor per-ticker `theme`, `directive`, and `explore_adjacent` fields
 - Focus your analysis on the timeframe most relevant to the ticker's directive
 

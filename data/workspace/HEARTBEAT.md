@@ -12,7 +12,7 @@ Run a full research cycle for every ticker in the watchlist.
 
 1. Load the watchlist:
 ```bash
-python3 manage_watchlist.py --show --file watchlist.json
+python3 manage_watchlist.py --show
 ```
 
 2. For **each ticker** in the watchlist, run the full research cycle:
