@@ -134,6 +134,9 @@ JSON
       && mv "$STATE_DIR/openclaw.json.tmp" "$STATE_DIR/openclaw.json"
   fi
 
+  # Let OpenClaw apply any auto-detected fixes (before Telegram config)
+  openclaw doctor --fix 2>/dev/null || true
+
   # Configure Telegram with per-agent bot accounts
   if [ -n "${MAX_TELEGRAM_BOT_TOKEN:-}" ]; then
     # Build the accounts object with all available bot tokens
@@ -168,7 +171,7 @@ JSON
     fi
 
     jq --argjson accounts "$ACCOUNTS_JSON" --argjson bindings "$BINDINGS_JSON" --argjson allow "$ALLOW_FROM" \
-      '.channels.telegram.enabled = true | .channels.telegram.groupPolicy = "open" | .channels.telegram.dmPolicy = "open" | .channels.telegram.allowFrom = $allow | .channels.telegram.accounts = $accounts | .bindings = $bindings' \
+      '.channels.telegram.enabled = true | .channels.telegram.groupPolicy = "open" | .channels.telegram.dmPolicy = "pairing" | .channels.telegram.allowFrom = $allow | .channels.telegram.accounts = $accounts | .bindings = $bindings' \
       "$STATE_DIR/openclaw.json" > "$STATE_DIR/openclaw.json.tmp" \
       && mv "$STATE_DIR/openclaw.json.tmp" "$STATE_DIR/openclaw.json"
   fi
@@ -181,8 +184,6 @@ JSON
     openclaw approvals allowlist add --target local --agent '*' --pattern "$pattern" 2>/dev/null || true
   done
 
-  # Let OpenClaw apply any auto-detected fixes
-  openclaw doctor --fix 2>/dev/null || true
 
   echo "  ✓ openclaw.json created"
 fi
