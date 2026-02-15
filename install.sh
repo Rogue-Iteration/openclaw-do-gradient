@@ -191,43 +191,55 @@ ok "Droplet created at $DROPLET_IP"
 # ── 5. Wait for SSH and deploy ──────────────────────────────────
 echo ""
 echo "[5/7] Deploying to Droplet..."
+SSH_OPTS="-o StrictHostKeyChecking=accept-new -o ConnectTimeout=10"
+
+# Helper: run SSH command with retries (handles sshd restarts during cloud-init)
+remote_cmd() {
+  for attempt in 1 2 3; do
+    if ssh $SSH_OPTS "root@$DROPLET_IP" "$@" 2>/dev/null; then
+      return 0
+    fi
+    sleep 5
+  done
+  ssh $SSH_OPTS "root@$DROPLET_IP" "$@"  # final attempt — let errors through
+}
 
 info "Waiting for SSH to become available..."
 for i in $(seq 1 30); do
-  if ssh -o StrictHostKeyChecking=accept-new -o ConnectTimeout=5 "root@$DROPLET_IP" true 2>/dev/null; then
+  if ssh $SSH_OPTS "root@$DROPLET_IP" true 2>/dev/null; then
     break
   fi
   sleep 5
 done
-sleep 3  # let sshd fully stabilize
 ok "SSH connected"
+
+# Wait for cloud-init to finish (sshd may restart during init)
+info "Waiting for cloud-init to finish..."
+remote_cmd 'cloud-init status --wait > /dev/null 2>&1 || sleep 10'
+ok "Droplet ready"
 
 # Harden the Droplet: firewall + auto-updates
 info "Configuring firewall..."
-ssh -o StrictHostKeyChecking=accept-new "root@$DROPLET_IP" \
-  'ufw default deny incoming && ufw default allow outgoing && ufw allow 22/tcp comment "SSH" && ufw delete allow 2375/tcp 2>/dev/null; ufw delete allow 2376/tcp 2>/dev/null; ufw --force enable'
+remote_cmd 'ufw default deny incoming && ufw default allow outgoing && ufw allow 22/tcp comment "SSH" && ufw delete allow 2375/tcp 2>/dev/null; ufw delete allow 2376/tcp 2>/dev/null; ufw --force enable'
 ok "Firewall active (SSH only)"
 
 info "Installing automatic security updates..."
-if ssh -o StrictHostKeyChecking=accept-new "root@$DROPLET_IP" \
-  'apt-get install -y -qq unattended-upgrades > /dev/null 2>&1 && dpkg-reconfigure -f noninteractive unattended-upgrades' 2>/dev/null; then
+if remote_cmd 'apt-get install -y -qq unattended-upgrades > /dev/null 2>&1 && dpkg-reconfigure -f noninteractive unattended-upgrades' 2>/dev/null; then
   ok "Unattended-upgrades enabled"
 else
-  echo "  ⚠ Unattended-upgrades skipped (apt may be locked by cloud-init). Install manually later."
+  echo "  ⚠ Unattended-upgrades skipped (apt may be locked). Install manually later."
 fi
 
 # Clone repo, copy .env, start containers
 info "Cloning repository..."
-ssh -o StrictHostKeyChecking=accept-new "root@$DROPLET_IP" \
-  "git clone $REPO_URL $REMOTE_DIR 2>/dev/null || (cd $REMOTE_DIR && git pull origin main)"
+remote_cmd "git clone $REPO_URL $REMOTE_DIR 2>/dev/null || (cd $REMOTE_DIR && git pull origin main)"
 
 info "Uploading .env..."
-scp -o StrictHostKeyChecking=accept-new "$ENV_FILE" "root@$DROPLET_IP:$REMOTE_DIR/.env"
-ssh -o StrictHostKeyChecking=accept-new "root@$DROPLET_IP" "chmod 600 $REMOTE_DIR/.env"
+scp $SSH_OPTS "$ENV_FILE" "root@$DROPLET_IP:$REMOTE_DIR/.env"
+remote_cmd "chmod 600 $REMOTE_DIR/.env"
 
 info "Starting Docker containers..."
-ssh -o StrictHostKeyChecking=accept-new "root@$DROPLET_IP" \
-  "cd $REMOTE_DIR && docker compose up -d --build"
+remote_cmd "cd $REMOTE_DIR && docker compose up -d --build"
 ok "Containers started"
 
 # ── 6. Verify ───────────────────────────────────────────────────
@@ -235,7 +247,7 @@ echo ""
 echo "[7/7] Verifying..."
 sleep 10
 
-if ssh -o StrictHostKeyChecking=accept-new "root@$DROPLET_IP" "docker ps --filter name=openclaw-research --format '{{.Status}}'" | grep -q "Up"; then
+if remote_cmd "docker ps --filter name=openclaw-research --format '{{.Status}}'" | grep -q "Up"; then
   echo ""
   echo "╔════════════════════════════════════════════════════════════╗"
   echo "║  ✅ OpenClaw is running!                                  ║"
