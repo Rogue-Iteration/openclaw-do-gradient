@@ -143,11 +143,19 @@ Open `.env` in your editor — you'll fill in each key as you create it below.
 </details>
 
 <details>
-<summary><strong>Telegram Bot</strong></summary>
+<summary><strong>Telegram Bots (4 bots — one per agent)</strong></summary>
+
+Each agent runs as its own Telegram bot. Create 4 bots via @BotFather:
 
 1. Open Telegram and search for **@BotFather**
-2. Send `/newbot` and follow the prompts
-3. Copy the **HTTP API token** → paste into `.env` as `TELEGRAM_BOT_TOKEN`
+2. Send `/newbot` four times to create bots for **Max**, **Nova**, **Luna**, and **Ace**
+3. Copy each bot's **HTTP API token** → paste into `.env`:
+   - `MAX_TELEGRAM_BOT_TOKEN` — Max (team lead)
+   - `NOVA_TELEGRAM_BOT_TOKEN` — Nova (web researcher)
+   - `LUNA_TELEGRAM_BOT_TOKEN` — Luna (social researcher)
+   - `ACE_TELEGRAM_BOT_TOKEN` — Ace (technical analyst)
+
+After deploying, create a **Telegram group** and add all 4 bots + yourself. `@mention` a bot to talk to that specific agent.
 </details>
 
 <details>

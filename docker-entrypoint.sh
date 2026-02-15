@@ -116,9 +116,6 @@ if [ ! -f "$STATE_DIR/openclaw.json" ]; then
   "tools": {
     "exec": {
       "security": "allowlist"
-    },
-    "agentToAgent": {
-      "enabled": true
     }
   }
 }
@@ -137,10 +134,32 @@ JSON
       && mv "$STATE_DIR/openclaw.json.tmp" "$STATE_DIR/openclaw.json"
   fi
 
-  # Configure Telegram if bot token is set
-  if [ -n "${TELEGRAM_BOT_TOKEN:-}" ]; then
-    jq --arg token "$TELEGRAM_BOT_TOKEN" \
-      '.channels.telegram.enabled = true | .channels.telegram.botToken = $token' \
+  # Configure Telegram with per-agent bot accounts
+  if [ -n "${MAX_TELEGRAM_BOT_TOKEN:-}" ]; then
+    # Build the accounts object with all available bot tokens
+    ACCOUNTS_JSON="{}"
+    BINDINGS_JSON="[]"
+
+    ACCOUNTS_JSON=$(echo "$ACCOUNTS_JSON" | jq --arg t "$MAX_TELEGRAM_BOT_TOKEN" '.max = {"botToken": $t}')
+    BINDINGS_JSON=$(echo "$BINDINGS_JSON" | jq '. + [{"channel": "telegram", "account": "max", "agentId": "fundamental-analyst"}]')
+
+    if [ -n "${NOVA_TELEGRAM_BOT_TOKEN:-}" ]; then
+      ACCOUNTS_JSON=$(echo "$ACCOUNTS_JSON" | jq --arg t "$NOVA_TELEGRAM_BOT_TOKEN" '.nova = {"botToken": $t}')
+      BINDINGS_JSON=$(echo "$BINDINGS_JSON" | jq '. + [{"channel": "telegram", "account": "nova", "agentId": "web-researcher"}]')
+    fi
+
+    if [ -n "${LUNA_TELEGRAM_BOT_TOKEN:-}" ]; then
+      ACCOUNTS_JSON=$(echo "$ACCOUNTS_JSON" | jq --arg t "$LUNA_TELEGRAM_BOT_TOKEN" '.luna = {"botToken": $t}')
+      BINDINGS_JSON=$(echo "$BINDINGS_JSON" | jq '. + [{"channel": "telegram", "account": "luna", "agentId": "social-researcher"}]')
+    fi
+
+    if [ -n "${ACE_TELEGRAM_BOT_TOKEN:-}" ]; then
+      ACCOUNTS_JSON=$(echo "$ACCOUNTS_JSON" | jq --arg t "$ACE_TELEGRAM_BOT_TOKEN" '.ace = {"botToken": $t}')
+      BINDINGS_JSON=$(echo "$BINDINGS_JSON" | jq '. + [{"channel": "telegram", "account": "ace", "agentId": "technical-analyst"}]')
+    fi
+
+    jq --argjson accounts "$ACCOUNTS_JSON" --argjson bindings "$BINDINGS_JSON" \
+      '.channels.telegram.enabled = true | .channels.telegram.accounts = $accounts | .bindings = $bindings' \
       "$STATE_DIR/openclaw.json" > "$STATE_DIR/openclaw.json.tmp" \
       && mv "$STATE_DIR/openclaw.json.tmp" "$STATE_DIR/openclaw.json"
   fi

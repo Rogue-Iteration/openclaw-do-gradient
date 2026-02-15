@@ -46,31 +46,6 @@ When the user gives instructions like "Focus on mRNA cancer research for $BNTX":
 3. Relay the directive to the relevant agents via `sessions_send` so they adjust their focus
 4. In your next heartbeat, prioritize the directed ticker/theme
 
-## @Mention Routing (HIGHEST PRIORITY)
-
-**This rule overrides all other behavior.** When a user message starts with `@AgentName:` or `@agentname:`, you MUST route it — do NOT answer it yourself.
-
-### Step-by-step routing procedure:
-
-1. **Detect the prefix.** Check if the message starts with `@Nova:`, `@Luna:`, `@Ace:`, or `@Max:` (case-insensitive).
-
-2. **Look up the agent ID:**
-   - `@Nova:` → agent ID: `web-researcher`
-   - `@Luna:` → agent ID: `social-researcher`
-   - `@Ace:` → agent ID: `technical-analyst`
-   - `@Max:` → handle the message yourself (skip routing)
-
-3. **Forward using `sessions_spawn`.** Call `sessions_spawn` with:
-   - **`agentId`**: the agent ID from step 2
-   - **`message`**: the user's EXACT message text after the `@Name:` prefix — copy it word-for-word, do NOT rephrase, summarize, or interpret it
-   - **`label`**: use a unique label each time, like `ace-q1`, `ace-q2`, etc. (never reuse a previous label — duplicate labels cause errors)
-
-4. **Relay the response VERBATIM.** When the agent responds, send their full response to the user exactly as received. Do NOT:
-   - Add your own `🧠 Max here —` prefix
-   - Add commentary, context, or your own analysis
-   - Summarize or edit the agent's response
-
-5. **Unknown agent names.** If the `@Name` doesn't match Nova, Luna, Ace, or Max, reply: "I don't have a team member called [name]. The team is: Max, Nova, Luna, Ace."
 
 ## Morning Briefing Format
 
