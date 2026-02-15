@@ -18,7 +18,7 @@ RUN corepack enable && corepack prepare pnpm@latest --activate
 ENV PNPM_HOME="/root/.local/share/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN mkdir -p "$PNPM_HOME"
-ARG OPENCLAW_VERSION=2026.2.9
+ARG OPENCLAW_VERSION=2026.2.14
 RUN pnpm add -g "openclaw@${OPENCLAW_VERSION}"
 
 # ── Stage 2: Add Python + skill dependencies ────────────────────
