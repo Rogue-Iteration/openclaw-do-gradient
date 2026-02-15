@@ -159,7 +159,7 @@ JSON
     fi
 
     jq --argjson accounts "$ACCOUNTS_JSON" --argjson bindings "$BINDINGS_JSON" \
-      '.channels.telegram.enabled = true | .channels.telegram.accounts = $accounts | .bindings = $bindings' \
+      '.channels.telegram.enabled = true | .channels.telegram.groupPolicy = "open" | .channels.telegram.dmPolicy = "open" | .channels.telegram.accounts = $accounts | .bindings = $bindings' \
       "$STATE_DIR/openclaw.json" > "$STATE_DIR/openclaw.json.tmp" \
       && mv "$STATE_DIR/openclaw.json.tmp" "$STATE_DIR/openclaw.json"
   fi
