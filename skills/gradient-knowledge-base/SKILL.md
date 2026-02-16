@@ -22,7 +22,7 @@ metadata:
         - requests>=2.31.0
         - boto3>=1.34.0
   author: Rogue Iteration
-  version: "0.1.2"
+  version: "0.1.3"
   tags: ["digitalocean", "gradient-ai", "knowledge-base", "rag", "semantic-search", "do-spaces"]
 ---
 

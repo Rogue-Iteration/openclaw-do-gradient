@@ -85,15 +85,19 @@ def query_kb(
         return {"success": False, "results": [], "query": query, "message": f"KB query failed: {str(e)}"}
 
 
-def build_rag_prompt(query: str, kb_results: list[dict]) -> str:
-    """Build a RAG-enhanced prompt combining the user's question with KB context.
+def build_rag_messages(query: str, kb_results: list[dict]) -> list[dict]:
+    """Build structured messages for RAG, separating system context from user input.
+
+    Returns a list of chat messages with proper role separation to prevent
+    prompt injection — user input stays in the 'user' role, instructions
+    and KB context stay in the 'system' role.
 
     Args:
         query: The user's original question.
         kb_results: Results from the Knowledge Base query.
 
     Returns:
-        The RAG-enhanced prompt string.
+        List of message dicts with 'role' and 'content' keys.
     """
     if not kb_results:
         context = "No relevant documents found in the knowledge base yet. It may still be building up."
@@ -106,20 +110,18 @@ def build_rag_prompt(query: str, kb_results: list[dict]) -> str:
             context_parts.append(f"### Source {i} (relevance: {score:.2f}, source: {source})\n{content}")
         context = "\n\n".join(context_parts)
 
-    return f"""Answer the user's question using the retrieved context below.
-Be specific, cite sources when available, and note when information might be incomplete.
+    system_msg = f"""You are a helpful assistant with access to a knowledge base.
+Answer the user's question using ONLY the retrieved context below.
+Be specific, cite source numbers when available, and note when information might be incomplete.
+If the KB doesn't have enough data, say so honestly. Be concise but thorough.
 
 ## Retrieved Context (from Knowledge Base):
-{context}
+{context}"""
 
-## User's Question:
-{query}
-
-## Instructions:
-- Answer based on the retrieved context above
-- If the KB doesn't have enough data, say so honestly
-- Be concise but thorough
-- Cite source numbers when referencing specific information"""
+    return [
+        {"role": "system", "content": system_msg},
+        {"role": "user", "content": query},
+    ]
 
 
 def query_with_rag(
@@ -160,8 +162,8 @@ def query_with_rag(
                          num_results=num_results, alpha=alpha)
     kb_results = kb_result.get("results", [])
 
-    # Step 2: Build RAG prompt
-    prompt = build_rag_prompt(query, kb_results)
+    # Step 2: Build structured messages (system context + user query separated)
+    messages = build_rag_messages(query, kb_results)
 
     # Step 3: Call LLM for synthesis
     try:
@@ -172,10 +174,7 @@ def query_with_rag(
 
         payload = {
             "model": model,
-            "messages": [
-                {"role": "system", "content": "You are a helpful assistant with access to a knowledge base. Answer questions using the provided context."},
-                {"role": "user", "content": prompt},
-            ],
+            "messages": messages,
             "temperature": 0.4,
             "max_tokens": 1500,
         }
