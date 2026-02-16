@@ -33,10 +33,10 @@ Fetch price data via yfinance and calculate technical indicators.
 
 ```bash
 # Basic usage
-python3 gather_technicals.py --ticker CAKE --company "The Cheesecake Factory"
+python3 /app/skills/gradient-data-gathering/scripts/gather_technicals.py --ticker CAKE --company "The Cheesecake Factory"
 
 # JSON output (indicators + signals data)
-python3 gather_technicals.py --ticker HOG --json
+python3 /app/skills/gradient-data-gathering/scripts/gather_technicals.py --ticker HOG --json
 ```
 
 **Output**: Markdown report with price summary, moving averages (SMA 20/50/200), RSI(14), MACD, Bollinger Bands, volume analysis, and detected signals (crossovers, divergences, breakouts).
@@ -56,13 +56,13 @@ Your heartbeat runs every **30 minutes**. On each cycle:
 
 ```bash
 # 1. Read the watchlist
-python3 manage_watchlist.py --show
+python3 /app/skills/gradient-research-assistant/scripts/manage_watchlist.py --show
 
 # 2. For each ticker: gather technicals and store to Spaces + KB
-python3 gather.py --ticker {{ticker}} --name "{{company_name}}" --agent ace --sources technicals
+python3 /app/skills/gradient-research-assistant/scripts/gather.py --ticker {{ticker}} --name "{{company_name}}" --agent ace --sources technicals
 
 # 3. Check schedules
-python3 schedule.py --check
+python3 /app/skills/gradient-research-assistant/scripts/schedule.py --check
 ```
 
 **After gathering**, evaluate signals:

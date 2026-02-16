@@ -2,7 +2,7 @@
 
 ## Cycle Steps
 
-1. **Load watchlist** — Run `python3 manage_watchlist.py --show` for current tickers, themes, and directives
+1. **Load watchlist** — Run `python3 /app/skills/gradient-research-assistant/scripts/manage_watchlist.py --show` for current tickers, themes, and directives
 2. **For each ticker on the watchlist**:
    a. Run `gather_social.py` with the ticker symbol, company name, and any theme/directive
    b. Run `store.py` to upload the social research report to DO Spaces and trigger KB re-indexing

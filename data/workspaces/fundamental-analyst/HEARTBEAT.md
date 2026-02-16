@@ -2,10 +2,10 @@
 
 ## Cycle Steps
 
-0. **Check scheduled updates** — Run `python3 schedule.py --check` to see if any scheduled reports are due. If any are due:
+0. **Check scheduled updates** — Run `python3 /app/skills/gradient-research-assistant/scripts/schedule.py --check` to see if any scheduled reports are due. If any are due:
    a. Execute the prompt for each due schedule (e.g., deliver the morning briefing or evening wrap)
-   b. After completing each, mark it as run: `python3 schedule.py --mark-run {id}`
-1. **Load watchlist** — Run `python3 manage_watchlist.py --show` for current tickers, themes, and directives
+   b. After completing each, mark it as run: `python3 /app/skills/gradient-research-assistant/scripts/schedule.py --mark-run {id}`
+1. **Load watchlist** — Run `python3 /app/skills/gradient-research-assistant/scripts/manage_watchlist.py --show` for current tickers, themes, and directives
 2. **Query the Knowledge Base** — For each ticker, query the KB for recent research accumulated by Nova
 3. **Run analysis** — Use `analyze.py` for each ticker:
    a. Quick pass (significance scoring 1-10)
@@ -24,8 +24,8 @@ Users can create, reschedule, or delete schedules by asking any agent. Default s
 - **Morning Briefing** — 08:00 weekdays (covers all tickers, theses, conviction changes, team activity)
 - **Evening Wrap** — 18:00 weekdays (summarizes the day's research, alerts, and outlook changes)
 
-To view schedules: `python3 schedule.py --list`
-To check what's due: `python3 schedule.py --check`
+To view schedules: `python3 /app/skills/gradient-research-assistant/scripts/schedule.py --list`
+To check what's due: `python3 /app/skills/gradient-research-assistant/scripts/schedule.py --check`
 
 ## Heartbeat Summary Format
 

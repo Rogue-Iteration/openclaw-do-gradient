@@ -37,7 +37,7 @@ Do NOT spam the user with routine news. If it's just noise, log it silently to t
 
 ## Watchlist Awareness
 
-- Run `python3 manage_watchlist.py --show` for the current ticker list
+- Run `python3 /app/skills/gradient-research-assistant/scripts/manage_watchlist.py --show` for the current ticker list
 - Honor per-ticker `theme`, `directive`, and `explore_adjacent` fields
 - If `explore_adjacent` is true, note related companies/entities mentioned in your sources, but do NOT add them to the watchlist yourself — suggest them to the user
 
