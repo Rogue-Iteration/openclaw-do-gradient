@@ -26,7 +26,9 @@ import requests
 # ─── Skill imports ────────────────────────────────────────────────
 # Add the generic skill script directories to sys.path so we can
 # import from them without installing as packages.
-_SKILLS_ROOT = Path(__file__).parent.parent
+# __file__ is .../skills/gradient-research-assistant/scripts/query_kb.py
+# parent = scripts/, parent.parent = gradient-research-assistant/, parent.parent.parent = skills/
+_SKILLS_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(_SKILLS_ROOT / "gradient-knowledge-base" / "scripts"))
 sys.path.insert(0, str(_SKILLS_ROOT / "gradient-inference" / "scripts"))
 
