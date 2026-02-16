@@ -199,6 +199,7 @@ echo "📋 Syncing persona files and skills..."
 
 # Copy skills to OpenClaw's managed skills dir (visible to all agents automatically)
 MANAGED_SKILLS_DIR="$STATE_DIR/skills"
+mkdir -p "$MANAGED_SKILLS_DIR"
 for skill in gradient-research-assistant gradient-inference gradient-knowledge-base gradient-data-gathering; do
   SKILL_SRC="$APP_DIR/skills/$skill"
   SKILL_DST="$MANAGED_SKILLS_DIR/$skill"
