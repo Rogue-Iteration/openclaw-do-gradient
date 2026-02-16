@@ -74,6 +74,23 @@ python3 manage_watchlist.py --show
 python3 manage_watchlist.py --set-directive BNTX --theme "mRNA cancer research" --directive "Focus on clinical trials"
 ```
 
+### gradient_pricing.py
+Look up current model pricing from DigitalOcean's official docs. No API key needed.
+
+```bash
+python3 skills/gradient-inference/scripts/gradient_pricing.py              # All models
+python3 skills/gradient-inference/scripts/gradient_pricing.py --model llama # Filter
+python3 skills/gradient-inference/scripts/gradient_pricing.py --json        # JSON output
+```
+
+### gradient_models.py
+List available models on the Gradient Inference API.
+
+```bash
+python3 skills/gradient-inference/scripts/gradient_models.py               # Pretty table
+python3 skills/gradient-inference/scripts/gradient_models.py --filter llama # Filter
+```
+
 ### alert.py
 Format and send alerts and morning briefings to the user.
 
