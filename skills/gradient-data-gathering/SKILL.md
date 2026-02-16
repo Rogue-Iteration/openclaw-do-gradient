@@ -2,8 +2,8 @@
 name: gradient-data-gathering
 description: >
   Data gathering tools for the Gradient Research Team. Fetches news (Google News RSS),
-  SEC filings (EDGAR), Reddit sentiment, and technical price data (yfinance) for stock
-  tickers on the watchlist.
+  SEC filings (EDGAR), fundamental financials (SEC EDGAR XBRL + yfinance), Reddit sentiment,
+  and technical price data (yfinance) for stock tickers on the watchlist.
 metadata:
   clawdbot:
     requires:
@@ -17,7 +17,7 @@ homepage: https://github.com/Rogue-Iteration/TheBigClaw
 
 # Data Gathering
 
-Three data-gathering scripts used by the Gradient Research Team agents.
+Four data-gathering scripts used by the Gradient Research Team agents.
 Each agent runs its own gatherer on a heartbeat cycle and stores results via the
 `gradient-research-assistant` shared skill.
 
@@ -42,6 +42,18 @@ python3 gather_social.py --ticker HOG --json
 Searches Reddit (r/wallstreetbets, r/stocks, r/investing, etc.) and calculates
 sentiment signals: volume, engagement ratio, cross-subreddit spread, upvote ratio.
 
+### gather_fundamentals.py — Financial Statements (Max)
+
+```bash
+python3 gather_fundamentals.py --ticker CAKE --company "The Cheesecake Factory"
+python3 gather_fundamentals.py --ticker BNTX --json
+```
+
+Pulls structured financial data from SEC EDGAR XBRL API (companyfacts endpoint) for
+5+ years of audited financials: revenue, net income, EPS, margins, balance sheet,
+cash flow, and key ratios (D/E, current ratio, net debt). Supplements with yfinance
+for company info, analyst recommendations, and earnings beat/miss history.
+
 ### gather_technicals.py — Price & Indicators (Ace)
 
 ```bash
@@ -49,7 +61,7 @@ python3 gather_technicals.py --ticker CAKE --company "The Cheesecake Factory"
 python3 gather_technicals.py --ticker HOG --json
 ```
 
-Uses `yfinance` to fetch 6 months of OHLCV data and calculates:
+Uses `yfinance` to fetch 5 years of OHLCV data and calculates:
 SMA (20/50/200), RSI(14), MACD(12,26,9), Bollinger Bands(20,2), volume analysis.
 Identifies signals: golden/death crosses, RSI overbought/oversold, MACD crossovers,
 Bollinger squeezes, volume spikes.
@@ -60,9 +72,11 @@ Bollinger squeezes, volume spikes.
 |----------|-----------|--------|
 | `news.google.com/rss/search` | Ticker + theme as query | `gather_web.py` |
 | `efts.sec.gov/LATEST/search-index` | Ticker as query | `gather_web.py` |
+| `data.sec.gov/api/xbrl/companyfacts/` | CIK number | `gather_fundamentals.py` |
+| `www.sec.gov/files/company_tickers.json` | None (bulk download) | `gather_fundamentals.py` |
 | `www.reddit.com/search.json` | Ticker as query | `gather_social.py` |
 | `www.reddit.com/r/{sub}/search.json` | Ticker as query | `gather_social.py` |
-| Yahoo Finance (via `yfinance`) | Ticker symbol | `gather_technicals.py` |
+| Yahoo Finance (via `yfinance`) | Ticker symbol | `gather_technicals.py`, `gather_fundamentals.py` |
 
 ## Security & Privacy
 
@@ -74,6 +88,6 @@ Bollinger squeezes, volume spikes.
 
 ## Trust Statement
 
-> By using this skill, public market data is fetched from Google News, SEC EDGAR,
-> Reddit, and Yahoo Finance. No private data leaves the machine. Only install if you
-> trust these public data sources.
+> By using this skill, public market data is fetched from Google News, SEC EDGAR
+> (text search + XBRL), Reddit, and Yahoo Finance. No private data leaves the machine.
+> Only install if you trust these public data sources.

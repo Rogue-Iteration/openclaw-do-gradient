@@ -1,0 +1,400 @@
+{
+    "cik": 887596,
+    "entityName": "CHEESECAKE FACTORY INC",
+    "facts": {
+        "us-gaap": {
+            "Revenues": {
+                "label": "Revenues",
+                "description": "Amount of revenue recognized from goods sold, services rendered, insurance premiums, or other activities that constitute an earning process.",
+                "units": {
+                    "USD": [
+                        {
+                            "end": "2021-12-28",
+                            "val": 2727827000,
+                            "form": "10-K",
+                            "filed": "2022-02-23",
+                            "fy": 2021,
+                            "fp": "FY"
+                        },
+                        {
+                            "end": "2022-01-03",
+                            "val": 3026365000,
+                            "form": "10-K",
+                            "filed": "2023-02-22",
+                            "fy": 2022,
+                            "fp": "FY"
+                        },
+                        {
+                            "end": "2023-01-03",
+                            "val": 3345916000,
+                            "form": "10-K",
+                            "filed": "2024-02-21",
+                            "fy": 2023,
+                            "fp": "FY"
+                        },
+                        {
+                            "end": "2024-01-02",
+                            "val": 3498272000,
+                            "form": "10-K",
+                            "filed": "2025-02-19",
+                            "fy": 2024,
+                            "fp": "FY"
+                        },
+                        {
+                            "end": "2024-04-02",
+                            "val": 877654000,
+                            "form": "10-Q",
+                            "filed": "2024-05-10",
+                            "fy": 2024,
+                            "fp": "Q1"
+                        },
+                        {
+                            "end": "2024-07-02",
+                            "val": 893456000,
+                            "form": "10-Q",
+                            "filed": "2024-08-08",
+                            "fy": 2024,
+                            "fp": "Q2"
+                        },
+                        {
+                            "end": "2020-12-29",
+                            "val": 1806700000,
+                            "form": "10-K",
+                            "filed": "2021-02-24",
+                            "fy": 2020,
+                            "fp": "FY"
+                        }
+                    ]
+                }
+            },
+            "NetIncomeLoss": {
+                "label": "Net Income (Loss)",
+                "description": "The portion of profit or loss for the period.",
+                "units": {
+                    "USD": [
+                        {
+                            "end": "2021-12-28",
+                            "val": 125700000,
+                            "form": "10-K",
+                            "filed": "2022-02-23",
+                            "fy": 2021,
+                            "fp": "FY"
+                        },
+                        {
+                            "end": "2022-01-03",
+                            "val": 160422000,
+                            "form": "10-K",
+                            "filed": "2023-02-22",
+                            "fy": 2022,
+                            "fp": "FY"
+                        },
+                        {
+                            "end": "2023-01-03",
+                            "val": 174558000,
+                            "form": "10-K",
+                            "filed": "2024-02-21",
+                            "fy": 2023,
+                            "fp": "FY"
+                        },
+                        {
+                            "end": "2024-01-02",
+                            "val": 192340000,
+                            "form": "10-K",
+                            "filed": "2025-02-19",
+                            "fy": 2024,
+                            "fp": "FY"
+                        },
+                        {
+                            "end": "2020-12-29",
+                            "val": -62800000,
+                            "form": "10-K",
+                            "filed": "2021-02-24",
+                            "fy": 2020,
+                            "fp": "FY"
+                        }
+                    ]
+                }
+            },
+            "GrossProfit": {
+                "label": "Gross Profit",
+                "description": "Revenue less cost of revenue.",
+                "units": {
+                    "USD": [
+                        {
+                            "end": "2023-01-03",
+                            "val": 784300000,
+                            "form": "10-K",
+                            "filed": "2024-02-21",
+                            "fy": 2023,
+                            "fp": "FY"
+                        },
+                        {
+                            "end": "2024-01-02",
+                            "val": 826500000,
+                            "form": "10-K",
+                            "filed": "2025-02-19",
+                            "fy": 2024,
+                            "fp": "FY"
+                        }
+                    ]
+                }
+            },
+            "OperatingIncomeLoss": {
+                "label": "Operating Income (Loss)",
+                "description": "The net result for the period of deducting operating expenses from operating revenues.",
+                "units": {
+                    "USD": [
+                        {
+                            "end": "2023-01-03",
+                            "val": 231400000,
+                            "form": "10-K",
+                            "filed": "2024-02-21",
+                            "fy": 2023,
+                            "fp": "FY"
+                        },
+                        {
+                            "end": "2024-01-02",
+                            "val": 254800000,
+                            "form": "10-K",
+                            "filed": "2025-02-19",
+                            "fy": 2024,
+                            "fp": "FY"
+                        }
+                    ]
+                }
+            },
+            "EarningsPerShareDiluted": {
+                "label": "Earnings Per Share, Diluted",
+                "description": "The amount of net income (loss) for the period per each share of common stock or unit outstanding during the reporting period.",
+                "units": {
+                    "USD/shares": [
+                        {
+                            "end": "2021-12-28",
+                            "val": 2.54,
+                            "form": "10-K",
+                            "filed": "2022-02-23",
+                            "fy": 2021,
+                            "fp": "FY"
+                        },
+                        {
+                            "end": "2022-01-03",
+                            "val": 3.38,
+                            "form": "10-K",
+                            "filed": "2023-02-22",
+                            "fy": 2022,
+                            "fp": "FY"
+                        },
+                        {
+                            "end": "2023-01-03",
+                            "val": 3.81,
+                            "form": "10-K",
+                            "filed": "2024-02-21",
+                            "fy": 2023,
+                            "fp": "FY"
+                        },
+                        {
+                            "end": "2024-01-02",
+                            "val": 4.22,
+                            "form": "10-K",
+                            "filed": "2025-02-19",
+                            "fy": 2024,
+                            "fp": "FY"
+                        }
+                    ]
+                }
+            },
+            "Assets": {
+                "label": "Assets",
+                "description": "Sum of the amounts of all assets.",
+                "units": {
+                    "USD": [
+                        {
+                            "end": "2023-01-03",
+                            "val": 4284500000,
+                            "form": "10-K",
+                            "filed": "2024-02-21",
+                            "fy": 2023,
+                            "fp": "FY"
+                        },
+                        {
+                            "end": "2024-01-02",
+                            "val": 4512800000,
+                            "form": "10-K",
+                            "filed": "2025-02-19",
+                            "fy": 2024,
+                            "fp": "FY"
+                        }
+                    ]
+                }
+            },
+            "Liabilities": {
+                "label": "Liabilities",
+                "description": "Sum of the amounts of all liabilities.",
+                "units": {
+                    "USD": [
+                        {
+                            "end": "2023-01-03",
+                            "val": 3680200000,
+                            "form": "10-K",
+                            "filed": "2024-02-21",
+                            "fy": 2023,
+                            "fp": "FY"
+                        },
+                        {
+                            "end": "2024-01-02",
+                            "val": 3842100000,
+                            "form": "10-K",
+                            "filed": "2025-02-19",
+                            "fy": 2024,
+                            "fp": "FY"
+                        }
+                    ]
+                }
+            },
+            "StockholdersEquity": {
+                "label": "Stockholders' Equity",
+                "description": "Total equity.",
+                "units": {
+                    "USD": [
+                        {
+                            "end": "2023-01-03",
+                            "val": 604300000,
+                            "form": "10-K",
+                            "filed": "2024-02-21",
+                            "fy": 2023,
+                            "fp": "FY"
+                        },
+                        {
+                            "end": "2024-01-02",
+                            "val": 670700000,
+                            "form": "10-K",
+                            "filed": "2025-02-19",
+                            "fy": 2024,
+                            "fp": "FY"
+                        }
+                    ]
+                }
+            },
+            "CashAndCashEquivalentsAtCarryingValue": {
+                "label": "Cash and Cash Equivalents",
+                "description": "Amount of cash and cash equivalents.",
+                "units": {
+                    "USD": [
+                        {
+                            "end": "2023-01-03",
+                            "val": 123400000,
+                            "form": "10-K",
+                            "filed": "2024-02-21",
+                            "fy": 2023,
+                            "fp": "FY"
+                        },
+                        {
+                            "end": "2024-01-02",
+                            "val": 148200000,
+                            "form": "10-K",
+                            "filed": "2025-02-19",
+                            "fy": 2024,
+                            "fp": "FY"
+                        }
+                    ]
+                }
+            },
+            "LongTermDebt": {
+                "label": "Long-term Debt",
+                "description": "Amount of long-term debt.",
+                "units": {
+                    "USD": [
+                        {
+                            "end": "2023-01-03",
+                            "val": 875600000,
+                            "form": "10-K",
+                            "filed": "2024-02-21",
+                            "fy": 2023,
+                            "fp": "FY"
+                        },
+                        {
+                            "end": "2024-01-02",
+                            "val": 842300000,
+                            "form": "10-K",
+                            "filed": "2025-02-19",
+                            "fy": 2024,
+                            "fp": "FY"
+                        }
+                    ]
+                }
+            },
+            "NetCashProvidedByOperatingActivities": {
+                "label": "Net Cash from Operating Activities",
+                "description": "Amount of cash inflow or outflow from operating activities.",
+                "units": {
+                    "USD": [
+                        {
+                            "end": "2023-01-03",
+                            "val": 445800000,
+                            "form": "10-K",
+                            "filed": "2024-02-21",
+                            "fy": 2023,
+                            "fp": "FY"
+                        },
+                        {
+                            "end": "2024-01-02",
+                            "val": 478500000,
+                            "form": "10-K",
+                            "filed": "2025-02-19",
+                            "fy": 2024,
+                            "fp": "FY"
+                        }
+                    ]
+                }
+            },
+            "PaymentsToAcquirePropertyPlantAndEquipment": {
+                "label": "Capital Expenditures",
+                "description": "Amount of payment for property, plant and equipment.",
+                "units": {
+                    "USD": [
+                        {
+                            "end": "2023-01-03",
+                            "val": 165400000,
+                            "form": "10-K",
+                            "filed": "2024-02-21",
+                            "fy": 2023,
+                            "fp": "FY"
+                        },
+                        {
+                            "end": "2024-01-02",
+                            "val": 178200000,
+                            "form": "10-K",
+                            "filed": "2025-02-19",
+                            "fy": 2024,
+                            "fp": "FY"
+                        }
+                    ]
+                }
+            },
+            "CommonStockSharesOutstanding": {
+                "label": "Common Stock Shares Outstanding",
+                "description": "Number of shares of common stock outstanding.",
+                "units": {
+                    "shares": [
+                        {
+                            "end": "2023-01-03",
+                            "val": 45200000,
+                            "form": "10-K",
+                            "filed": "2024-02-21",
+                            "fy": 2023,
+                            "fp": "FY"
+                        },
+                        {
+                            "end": "2024-01-02",
+                            "val": 44800000,
+                            "form": "10-K",
+                            "filed": "2025-02-19",
+                            "fy": 2024,
+                            "fp": "FY"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

@@ -104,6 +104,15 @@ python3 gather.py --ticker {{ticker}} --name "{{company_name}}" --output /tmp/re
 
 Show the user a summary of what was found (number of articles, posts, filings).
 
+### research_fundamentals
+Gather structured financial data (SEC EDGAR XBRL + yfinance) for a ticker.
+
+```bash
+python3 gather_fundamentals.py --ticker {{ticker}} --company "{{company_name}}" --output /tmp/fundamentals_{{ticker}}.md
+```
+
+Returns 5+ years of audited financials: revenue, net income, EPS, balance sheet, cash flow, key ratios, analyst recommendations, and earnings history.
+
 ### analyze_ticker
 Run significance analysis on gathered research data.
 
@@ -217,19 +226,24 @@ Days format (internal): `*` (daily), `1-5` (weekdays), `0,6` (weekends), `0` (Su
 Valid agents: `max`, `nova`, `luna`, `ace`.
 
 ### run_research_cycle
-Full heartbeat cycle for one ticker: gather → store → index → analyze → alert if needed.
+Per-agent heartbeat cycle: gather → store → index → (Max) analyze → alert if needed.
 
 ```bash
-# Step 1: Gather
-python3 gather.py --ticker {{ticker}} --name "{{company_name}}" --output /tmp/research_{{ticker}}.md
+# Nova's cycle: web + fundamentals
+python3 gather.py --ticker {{ticker}} --name "{{company_name}}" --agent nova --sources web,fundamentals
 
-# Step 2: Store to Spaces and trigger KB re-index
-python3 store.py --ticker {{ticker}} --data /tmp/research_{{ticker}}.md
+# Ace's cycle: technicals
+python3 gather.py --ticker {{ticker}} --name "{{company_name}}" --agent ace --sources technicals
 
-# Step 3: Analyze
+# Max's cycle: query KB for team findings, then analyze
+python3 query_kb.py --query "Latest research findings for ${{ticker}}"
 python3 analyze.py --ticker {{ticker}} --name "{{company_name}}" --data /tmp/research_{{ticker}}.md --verbose
+
+# Dry run (gather only, no store/reindex)
+python3 gather.py --ticker {{ticker}} --name "{{company_name}}" --agent nova --sources web --dry-run
 ```
 
+Each agent stores their results separately to Spaces (`research/{date}/{TICKER}_{source}.md`).
 If the analysis says `should_alert: true`, proactively alert the user with the formatted message.
 
 ## Example Interactions

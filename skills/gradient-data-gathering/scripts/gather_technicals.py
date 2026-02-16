@@ -29,12 +29,12 @@ import yfinance as yf
 # ─── Price Data Fetching ─────────────────────────────────────────
 
 
-def fetch_price_data(ticker: str, period: str = "6mo") -> dict:
+def fetch_price_data(ticker: str, period: str = "5y") -> dict:
     """Fetch OHLCV price data from yfinance.
 
     Args:
         ticker: Stock ticker symbol
-        period: Data period (e.g., '1mo', '3mo', '6mo', '1y')
+        period: Data period (e.g., '1mo', '3mo', '6mo', '1y', '5y')
 
     Returns:
         dict with 'success', 'data' (list of OHLCV dicts), 'info' (stock info)
