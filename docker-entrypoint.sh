@@ -213,23 +213,6 @@ for agent in "${AGENTS[@]}"; do
       ln -s "$SHARED_SKILL_DIR" "$AGENT_WS/skills/$skill"
     fi
   done
-
-  # Create watchlist.txt breadcrumb — agents sometimes try to read this file
-  # instead of using the manage_watchlist.py script. This redirect prevents
-  # ENOENT errors and nudges the agent to use the correct tool.
-  if [ ! -f "$AGENT_WS/watchlist.txt" ]; then
-    cat > "$AGENT_WS/watchlist.txt" <<'REDIRECT'
-⚠️ This file is not the watchlist. The watchlist is stored in SQLite.
-
-To manage the watchlist, use manage_watchlist.py:
-
-  python3 manage_watchlist.py --show                          # View watchlist
-  python3 manage_watchlist.py --add TICKER --name "Name"      # Add ticker
-  python3 manage_watchlist.py --remove TICKER                 # Remove ticker
-
-Do NOT write to this file. Run the commands above instead.
-REDIRECT
-  fi
 done
 
 # Shared workspace persona files (default agent fallback)

@@ -12,6 +12,7 @@
 
 ## Research Rules
 
+- ⛔ **The watchlist is in SQLite** — there is NO `watchlist.txt`, `watchlist.json`, or any watchlist file. NEVER try to read or write a watchlist file. Use `python3 manage_watchlist.py --show` to view it and `--add`/`--remove` to modify it.
 - Run research tools from the skill's working directory: `skills/gradient-research-assistant/`
 - Always use `manage_watchlist.py` when managing the watchlist (data is in SQLite, not a JSON file)
 - When running a full research cycle: gather → store → analyze (in that order)

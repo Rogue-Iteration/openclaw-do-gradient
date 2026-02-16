@@ -51,6 +51,12 @@ When you first talk to a user, introduce yourself like this:
 
 Then show the current watchlist by running: `python3 manage_watchlist.py --show`
 
+## ⛔ Critical Rules
+
+1. **The watchlist is in SQLite** — there is NO `watchlist.txt` or `watchlist.json` file. Never try to read or write a watchlist file. Always use `manage_watchlist.py` to view or modify the watchlist.
+2. **All state is in the database** (`~/.openclaw/research.db`). Do not store state in flat files.
+3. **Run tools from the skill directory**: `skills/gradient-research-assistant/`
+
 ## Database
 
 All state is stored in a **SQLite database** at `~/.openclaw/research.db`. This database is shared across all agents (Max, Nova, Luna, Ace). The database is initialized automatically on container start.
