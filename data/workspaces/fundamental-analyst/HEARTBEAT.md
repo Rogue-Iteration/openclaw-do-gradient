@@ -1,83 +1,47 @@
-# Max — Heartbeat Cycle (every 2 hours)
+# Max — Heartbeat Cycle
 
-## Cycle Steps
+## Every Heartbeat
 
-0. **Check scheduled updates** — Run `python3 /app/skills/gradient-research-assistant/scripts/schedule.py --check --agent max` to see if any scheduled reports are due (includes team-wide `all` schedules). If any are due:
-   a. Execute the scheduled task (see "When a Briefing is Due" below) — **YOU MUST FOLLOW EVERY STEP**
-   b. After completing each, mark it as run: `python3 /app/skills/gradient-research-assistant/scripts/schedule.py --mark-run {id} --agent max`
-1. **Check for user messages** — If the user has sent you a message, respond to it.
-2. **Check for inter-agent messages** — If another agent sent you a message via `sessions_send`, respond (1 response only).
-3. **That's it** — Do NOT proactively run research, query the KB, or analyze tickers on every heartbeat. Only do research when a scheduled briefing fires or the user explicitly asks.
+0. **Check schedules** — `python3 /app/skills/gradient-research-assistant/scripts/schedule.py --check --agent max`. If due, run the briefing (see below), then mark done: `--mark-run {id} --agent max`
+1. **Check user messages** — respond if any
+2. **Check inter-agent messages** — respond via `sessions_send` (1 reply only)
+3. Done. Do NOT auto-research every cycle.
 
----
+## BRIEFING PROCEDURE (MANDATORY)
 
-## When a Briefing is Due
+When a scheduled briefing fires OR the user asks for one, you MUST execute ALL steps:
 
-> **⚠️ MANDATORY: You MUST execute EVERY step below. Do NOT skip steps. Do NOT say "nothing to report" without actually running the commands. The user is counting on you to deliver a real briefing with real data.**
+**Step 1** — Load watchlist:
+`python3 /app/skills/gradient-research-assistant/scripts/manage_watchlist.py --show`
 
-### Step 1: Load the watchlist
-Run this command:
+**Step 2** — Query KB for EACH ticker:
+`python3 /app/skills/gradient-knowledge-base/scripts/gradient_kb_query.py --query "Latest research for $TICKER" --rag --json`
+
+**Step 3** — Analyze with LLM:
+`python3 /app/skills/gradient-inference/scripts/gradient_chat.py --prompt "Analyze: {findings}" --json`
+
+**Step 4** — Trigger ALL agents via sessions_send (MANDATORY):
 ```
-python3 /app/skills/gradient-research-assistant/scripts/manage_watchlist.py --show
-```
-
-### Step 2: Query the Knowledge Base for EACH ticker
-For each ticker on the watchlist, run:
-```
-python3 /app/skills/gradient-knowledge-base/scripts/gradient_kb_query.py --query "Latest research for $TICKER" --rag --json
-```
-Report what you find — even if the KB is empty, say "No data found in KB for $TICKER."
-
-### Step 3: Run significance analysis
-Use the LLM to analyze whatever you found:
-```
-python3 /app/skills/gradient-inference/scripts/gradient_chat.py --prompt "Analyze significance of the following findings for $TICKER: {findings}" --json
+sessions_send("web-researcher", "Briefing NOW. Post your latest research for the user.")
+sessions_send("technical-analyst", "Briefing NOW. Post your technical update for the user.")
+sessions_send("social-researcher", "Briefing NOW. Post your status for the user.")
 ```
 
-### Step 4: Trigger EVERY agent with sessions_send
-You MUST trigger ALL agents. Do NOT skip this.
-```
-sessions_send("web-researcher", "Team briefing is happening NOW. Provide your latest research findings for the user. Report on all watchlist tickers.")
-```
-```
-sessions_send("technical-analyst", "Team briefing is happening NOW. Provide your latest technical analysis for the user. Report on all watchlist tickers.")
-```
-```
-sessions_send("social-researcher", "Team briefing is happening NOW. Provide your status update for the user.")
-```
+**Step 5** — Post your synthesis to the user with thesis + conviction for each ticker.
 
-### Step 5: Post your synthesis
-After the agents respond, post a briefing to the user that includes:
-- Your own analysis from Steps 2-3
-- A summary of what each agent reported
-- Your current thesis and conviction level for each ticker
-- Anything that needs the user's attention
+**Step 6** — Store: upload to Spaces + reindex KB.
 
-### Step 6: Store analysis
-Upload your synthesis to DO Spaces:
-```
-python3 /app/skills/gradient-knowledge-base/scripts/gradient_spaces.py --upload /tmp/analysis_briefing.md --key "research/{date}/briefing.md" --json
-```
-Then trigger KB re-indexing:
-```
-python3 /app/skills/gradient-knowledge-base/scripts/gradient_kb_manage.py --reindex --json
-```
+> NEVER say "nothing to report" without running Steps 1-4 first. NEVER skip sessions_send.
 
----
+## Schedule Commands
 
-## Scheduled Reports
+- List: `python3 /app/skills/gradient-research-assistant/scripts/schedule.py --list`
+- Check: `--check`
+- Users set schedules by telling you (e.g., "morning briefing at 8:30 weekdays")
 
-Scheduled reports are managed via the schedule system. The user will tell you what to schedule.
-Example: "Schedule a morning briefing at 8:30 AM weekdays" → create a cron job.
+## Rules
 
-To view schedules: `python3 /app/skills/gradient-research-assistant/scripts/schedule.py --list`
-To check what's due: `python3 /app/skills/gradient-research-assistant/scripts/schedule.py --check`
-
-## Important
-
-- **NEVER say "nothing to report" without running the actual commands first.** If the KB is empty, say so explicitly. If agents didn't respond, say so.
-- **ALWAYS trigger all agents with `sessions_send` during a briefing — no exceptions.**
-- Do NOT auto-research on every heartbeat. Only research when a briefing is scheduled or the user asks.
-- You are the voice of synthesis. Don't just repeat what others found — add context, connect dots, form opinions.
-- Be honest about uncertainty. "I'm 60% confident" is more useful than false precision.
-- The user is the boss. Their directives override everything.
+- Only research when briefing fires or user asks. No auto-research.
+- Synthesize, don't parrot. Add context, connect dots, form opinions.
+- Be honest about uncertainty.
+- User directives override everything.
