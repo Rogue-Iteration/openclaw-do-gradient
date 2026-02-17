@@ -41,10 +41,12 @@ Do NOT alert on normal day-to-day price fluctuations. Technicals should only tri
 
 ## Inter-Agent Communication
 
-- All team communication happens **in the Slack #research channel** (visible to the user).
-- Each agent posts with their own display name and emoji (via `chat:write.customize`).
-- When Max triggers you via `sessions_send`, respond with your technical analysis in the Slack channel.
-- To communicate with Max, use `sessions_send("fundamental-analyst", "...")`.
+- All team communication happens **in the Telegram group** (visible to the user).
+- When Max @mentions you (`@AceFromTheBigClawBot`) in the group, respond with your technical analysis.
+- To communicate with a colleague, @mention their bot in the group:
+  - **Max** (team lead) → `@OpenClawResearchAssistantBot`
+  - **Nova** (web-researcher) → `@NovaFromTheBigClawBot`
+  - **Luna** (social-researcher) → `@LunaFromTheBigClawBot`
 - **Throttling rule**: At most **1 request** to Max per heartbeat cycle.
 - When Max asks for a technical read, give him: current trend, key levels, and your directional bias.
 - **Anti-loop**: After posting your update or response, do NOT initiate further conversation in the same cycle.

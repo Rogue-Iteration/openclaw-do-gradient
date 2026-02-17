@@ -30,7 +30,7 @@ if [ ! -f "$STATE_DIR/openclaw.json" ]; then
   "plugins": {
     "enabled": true,
     "entries": {
-      "slack": { "enabled": true }
+      "telegram": { "enabled": true }
     }
   },
   "models": {
@@ -92,32 +92,28 @@ if [ ! -f "$STATE_DIR/openclaw.json" ]; then
         "name": "Max",
         "default": true,
         "workspace": "/root/.openclaw/agents/fundamental-analyst/agent",
-        "model": { "primary": "gradient/openai-gpt-oss-120b" },
-        "identity": { "displayName": "Max 🧠", "emoji": "brain" }
+        "model": { "primary": "gradient/openai-gpt-oss-120b" }
       },
       {
         "id": "web-researcher",
         "name": "Nova",
         "default": false,
         "workspace": "/root/.openclaw/agents/web-researcher/agent",
-        "model": { "primary": "gradient/openai-gpt-oss-120b" },
-        "identity": { "displayName": "Nova 📰", "emoji": "newspaper" }
+        "model": { "primary": "gradient/openai-gpt-oss-120b" }
       },
       {
         "id": "social-researcher",
         "name": "Luna",
         "default": false,
         "workspace": "/root/.openclaw/agents/social-researcher/agent",
-        "model": { "primary": "gradient/openai-gpt-oss-120b" },
-        "identity": { "displayName": "Luna 🦞", "emoji": "lobster" }
+        "model": { "primary": "gradient/openai-gpt-oss-120b" }
       },
       {
         "id": "technical-analyst",
         "name": "Ace",
         "default": false,
         "workspace": "/root/.openclaw/agents/technical-analyst/agent",
-        "model": { "primary": "gradient/openai-gpt-oss-120b" },
-        "identity": { "displayName": "Ace 📊", "emoji": "chart_with_upwards_trend" }
+        "model": { "primary": "gradient/openai-gpt-oss-120b" }
       }
     ]
   },
@@ -142,17 +138,46 @@ JSON
       && mv "$STATE_DIR/openclaw.json.tmp" "$STATE_DIR/openclaw.json"
   fi
 
-  # Let OpenClaw apply any auto-detected fixes (before Slack config)
+  # Let OpenClaw apply any auto-detected fixes (before Telegram config)
   openclaw doctor --fix 2>/dev/null || true
 
-  # Configure Slack (Socket Mode — no exposed ports needed)
-  if [ -n "${SLACK_BOT_TOKEN:-}" ] && [ -n "${SLACK_APP_TOKEN:-}" ]; then
-    jq --arg bot "$SLACK_BOT_TOKEN" --arg app "$SLACK_APP_TOKEN" \
-      '.channels.slack.enabled = true | .channels.slack.mode = "socket" | .channels.slack.botToken = $bot | .channels.slack.appToken = $app | .channels.slack.groupPolicy = "open" | .channels.slack.dmPolicy = "pairing" | .channels.slack.channels = {"*": {"requireMention": true, "allowBots": true}}' \
+  # Configure Telegram with per-agent bot accounts
+  if [ -n "${MAX_TELEGRAM_BOT_TOKEN:-}" ]; then
+    # Build the accounts object with all available bot tokens
+    ACCOUNTS_JSON="{}"
+    BINDINGS_JSON="[]"
+
+    ACCOUNTS_JSON=$(echo "$ACCOUNTS_JSON" | jq --arg t "$MAX_TELEGRAM_BOT_TOKEN" '.max = {"botToken": $t}')
+    BINDINGS_JSON=$(echo "$BINDINGS_JSON" | jq '. + [{"match": {"channel": "telegram", "accountId": "max"}, "agentId": "fundamental-analyst"}]')
+
+    if [ -n "${NOVA_TELEGRAM_BOT_TOKEN:-}" ]; then
+      ACCOUNTS_JSON=$(echo "$ACCOUNTS_JSON" | jq --arg t "$NOVA_TELEGRAM_BOT_TOKEN" '.nova = {"botToken": $t}')
+      BINDINGS_JSON=$(echo "$BINDINGS_JSON" | jq '. + [{"match": {"channel": "telegram", "accountId": "nova"}, "agentId": "web-researcher"}]')
+    fi
+
+    if [ -n "${LUNA_TELEGRAM_BOT_TOKEN:-}" ]; then
+      ACCOUNTS_JSON=$(echo "$ACCOUNTS_JSON" | jq --arg t "$LUNA_TELEGRAM_BOT_TOKEN" '.luna = {"botToken": $t}')
+      BINDINGS_JSON=$(echo "$BINDINGS_JSON" | jq '. + [{"match": {"channel": "telegram", "accountId": "luna"}, "agentId": "social-researcher"}]')
+    fi
+
+    if [ -n "${ACE_TELEGRAM_BOT_TOKEN:-}" ]; then
+      ACCOUNTS_JSON=$(echo "$ACCOUNTS_JSON" | jq --arg t "$ACE_TELEGRAM_BOT_TOKEN" '.ace = {"botToken": $t}')
+      BINDINGS_JSON=$(echo "$BINDINGS_JSON" | jq '. + [{"match": {"channel": "telegram", "accountId": "ace"}, "agentId": "technical-analyst"}]')
+    fi
+
+    # Build allowFrom list: use TELEGRAM_ALLOWED_IDS if set, otherwise open to all
+    if [ -n "${TELEGRAM_ALLOWED_IDS:-}" ]; then
+      # Convert comma-separated IDs to JSON array: "123,456" → ["123","456"]
+      ALLOW_FROM=$(echo "$TELEGRAM_ALLOWED_IDS" | tr ',' '\n' | jq -R . | jq -s .)
+    else
+      echo "  ⚠️  TELEGRAM_ALLOWED_IDS not set — bots are open to ALL users"
+      ALLOW_FROM='["*"]'
+    fi
+
+    jq --argjson accounts "$ACCOUNTS_JSON" --argjson bindings "$BINDINGS_JSON" --argjson allow "$ALLOW_FROM" \
+      '.channels.telegram.enabled = true | .channels.telegram.groupPolicy = "open" | .channels.telegram.dmPolicy = "pairing" | .channels.telegram.allowFrom = $allow | .channels.telegram.accounts = $accounts | .channels.telegram.groups = {"*": {"requireMention": true}} | .bindings = $bindings' \
       "$STATE_DIR/openclaw.json" > "$STATE_DIR/openclaw.json.tmp" \
       && mv "$STATE_DIR/openclaw.json.tmp" "$STATE_DIR/openclaw.json"
-  else
-    echo "  ⚠️  SLACK_BOT_TOKEN or SLACK_APP_TOKEN not set — Slack disabled"
   fi
 
   # Configure exec approvals — allow only specific skill scripts, not arbitrary commands

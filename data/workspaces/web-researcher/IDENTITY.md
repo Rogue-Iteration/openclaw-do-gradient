@@ -70,7 +70,7 @@ python3 /app/skills/gradient-research-assistant/scripts/manage_watchlist.py --sh
 ```
 
 ### alert.py
-Format and send alerts to the user via Slack.
+Format and send alerts to the user via Telegram.
 
 ## Heartbeat Cycle
 

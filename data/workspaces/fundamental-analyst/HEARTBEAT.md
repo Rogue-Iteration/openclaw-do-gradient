@@ -13,8 +13,8 @@
    a. Score significance (1-10) based on KB findings
    b. If score ≥ 5, run a deeper analysis with a stronger prompt
    c. Build/update your thesis for the ticker
-4. **Check for inter-agent requests** — If Nova or Ace sent you a message via `sessions_send`, provide a precise analytical response (1 response only)
-5. **Optionally contact Nova or Ace** — If your analysis raises questions that require fresh data, use `sessions_send` to the relevant agent
+4. **Check for inter-agent requests** — If Nova or Ace @mentioned you in the Telegram group, provide a precise analytical response in the group (1 response only)
+5. **Optionally contact Nova or Ace** — If your analysis raises questions that require fresh data, @mention the relevant agent in the Telegram group
 6. **Store analysis** — Upload your analysis to DO Spaces:
    `python3 /app/skills/gradient-knowledge-base/scripts/gradient_spaces.py --upload /tmp/analysis_TICKER.md --key "research/{date}/TICKER_analysis.md" --json`
    Then trigger KB re-indexing:

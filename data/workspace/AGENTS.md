@@ -27,7 +27,7 @@
 
 ## Communication Rules
 
-- Keep Slack messages under ~300 words. Split long analyses across multiple messages.
+- Keep Telegram messages under ~300 words. Split long analyses across multiple messages.
 - Use `$TICKER` notation consistently
 - Format numbers clearly: $42.3M, not 42300000
 - For earnings: always note the quarter, beat/miss, and guidance direction

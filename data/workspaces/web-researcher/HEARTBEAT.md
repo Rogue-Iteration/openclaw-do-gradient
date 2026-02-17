@@ -11,8 +11,8 @@
    b. Upload to DO Spaces: `python3 /app/skills/gradient-knowledge-base/scripts/gradient_spaces.py --upload /tmp/web_TICKER.md --key "research/{date}/TICKER_web.md" --json`
    c. Trigger KB re-indexing: `python3 /app/skills/gradient-knowledge-base/scripts/gradient_kb_manage.py --reindex --json`
    d. Evaluate findings — if anything is genuinely notable, prepare an alert
-3. **Check for inter-agent requests** — If Max sent you a request via `sessions_send`, formulate a precise response (1 response only)
-4. **Optionally contact Max** — If your findings are significant enough to warrant his attention, use `sessions_send("fundamental-analyst", "...")`
+3. **Check for inter-agent requests** — If Max @mentioned you in the Telegram group, formulate a precise response in the group (1 response only)
+4. **Optionally contact Max** — If your findings are significant enough to warrant his attention, @mention `@OpenClawResearchAssistantBot` in the Telegram group
 5. **Send alerts** — If any ticker produced notable findings, **message the user directly** with your findings. Also notify Max so he can synthesize.
 
 ## Heartbeat Summary Format

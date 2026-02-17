@@ -11,8 +11,8 @@
    b. Upload to DO Spaces: `python3 /app/skills/gradient-knowledge-base/scripts/gradient_spaces.py --upload /tmp/technicals_TICKER.md --key "research/{date}/TICKER_technicals.md" --json`
    c. Trigger KB re-indexing: `python3 /app/skills/gradient-knowledge-base/scripts/gradient_kb_manage.py --reindex --json`
    d. Evaluate signals — if any significant technical pattern is detected, prepare an alert
-3. **Check for inter-agent requests** — If Max sent you a request via `sessions_send`, provide a precise technical analysis response (1 response only)
-4. **Optionally contact Max** — If your signals are significant enough to warrant his attention, use `sessions_send("fundamental-analyst", "...")`
+3. **Check for inter-agent requests** — If Max @mentioned you in the Telegram group, provide a precise technical analysis response in the group (1 response only)
+4. **Optionally contact Max** — If your signals are significant enough to warrant his attention, @mention `@OpenClawResearchAssistantBot` in the Telegram group
 5. **Send alerts** — If any ticker produced significant technical signals, **message the user directly** with the signal and your read. Also notify Max so he can add fundamental context.
 
 ## Heartbeat Summary Format

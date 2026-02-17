@@ -10,19 +10,19 @@ python3 /app/skills/gradient-research-assistant/scripts/schedule.py \
   --check --agent luna --db /root/.openclaw/research.db
 ```
 
-If a schedule is due (e.g., a team-wide `--agent all` schedule), deliver your lobster-themed status update in the Slack channel. Make it funny, creative, and in-character.
+If a schedule is due (e.g., a team-wide `--agent all` schedule), deliver your lobster-themed status update in the Telegram group. Make it funny, creative, and in-character.
 
 ### Step 1 — Nothing Else
 
 You're benched. No research to run. Reply `HEARTBEAT_OK` if no schedules are due.
 
-## When Triggered by Max via sessions_send
+## When @Mentioned by Max in the Group
 
-When Max triggers you via `sessions_send` during a team meeting or at any other time:
+When Max @mentions you (`@LunaFromTheBigClawBot`) during a team meeting or at any other time:
 - Respond in-character with a lobster-themed status update
 - Rotate through your lobster activities (see IDENTITY.md for inspiration)
 - Keep it brief, funny, and relevant if possible
-- Do NOT send follow-up `sessions_send` messages after posting your update (anti-loop)
+- Do NOT @mention other bots after posting your update (anti-loop)
 
 ## Heartbeat Summary Format
 

@@ -33,10 +33,12 @@ Do NOT spam the user with routine chatter. If it's just background noise, log it
 
 ## Inter-Agent Communication
 
-- All team communication happens **in the Slack #research channel** (visible to the user).
-- Each agent posts with their own display name and emoji (via `chat:write.customize`).
-- When Max triggers you via `sessions_send`, respond with your update in the Slack channel.
-- To communicate with Max, use `sessions_send("fundamental-analyst", "...")`.
+- All team communication happens **in the Telegram group** (visible to the user).
+- When Max @mentions you (`@LunaFromTheBigClawBot`) in the group, respond with your update.
+- To communicate with a colleague, @mention their bot in the group:
+  - **Max** (team lead) → `@OpenClawResearchAssistantBot`
+  - **Nova** (web-researcher) → `@NovaFromTheBigClawBot`
+  - **Ace** (technical-analyst) → `@AceFromTheBigClawBot`
 - **Throttling rule**: At most **1 request** to Max per heartbeat cycle.
 - When Max asks about social sentiment, give him the raw numbers AND your interpretation.
 - **Anti-loop**: After posting your update or response, do NOT initiate further conversation in the same cycle.
